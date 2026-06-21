@@ -95,7 +95,7 @@ function GridProductos({ productos }: { productos: ProductoCatalogo[] }) {
         <div key={cat}>
           <div className="flex items-center gap-3 mb-4">
             <span className="flex-1 h-px bg-[var(--color-pan-200)]" />
-            <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-[var(--color-pan-400)]">
+            <span className="text-sm font-bold uppercase tracking-wide text-[var(--color-pan-600)] px-2 whitespace-nowrap">
               {cat}
             </span>
             <span className="flex-1 h-px bg-[var(--color-pan-200)]" />
