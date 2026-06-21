@@ -1,65 +1,357 @@
-import Image from "next/image";
+import Link from "next/link"
+import Image from "next/image"
+import Navbar from "@/components/ui/Navbar"
 
-export default function Home() {
+// ─── Datos ────────────────────────────────────────────────────────────────────
+
+const BENEFICIOS = [
+  { emoji: "🌱", titulo: "Sabes exactamente qué estás comiendo", desc: "Solo cuatro ingredientes: harina, agua, sal y tiempo. Nada más. Lo que ves es lo que comes." },
+  { emoji: "💚", titulo: "Lo comes y no te pesa", desc: "Ese malestar que sientes después del pan de caja aquí no existe. Tu cuerpo lo recibe como si fuera un amigo." },
+  { emoji: "⚡", titulo: "Energía estable, sin bajones", desc: "No te caerás de sueño a media mañana. Este pan te mantiene activo y con energía mucho más tiempo." },
+  { emoji: "😌", titulo: "Tu barriga te lo agradece", desc: "El proceso de fermentación viva hace que tu digestión trabaje mejor — menos hinchazón, más comodidad en tu día." },
+  { emoji: "🌾", titulo: "Sin químicos, sin trucos", desc: "No necesita conservadores porque está hecho para durar de forma natural. Fresco de verdad, sin nada que esconder." },
+  { emoji: "✨", titulo: "Tu cuerpo aprovecha más", desc: "El tiempo y el cuidado que le ponemos hace que cada mordida te aporte más. Lo sientes en cómo te mantienes satisfecho." },
+]
+
+const COMPARACION = [
+  { aspecto: "Qué lleva",          madre: "Harina, agua, sal y tiempo",  tienda: "Ingredientes que no reconoces" },
+  { aspecto: "Cómo se hace",       madre: "A mano, con paciencia",        tienda: "Proceso industrial acelerado" },
+  { aspecto: "Conservadores",      madre: "Ninguno",                      tienda: "Sí — para durar semanas en anaquel" },
+  { aspecto: "Cómo te cae",        madre: "Ligero, sin malestar",         tienda: "Pesado, puede hinchar" },
+  { aspecto: "Energía que te da",  madre: "Duradera y estable",           tienda: "Rápida y con bajón después" },
+  { aspecto: "Sabor",              madre: "Profundo, con carácter",       tienda: "Igual siempre, sin personalidad" },
+  { aspecto: "Cuánto dura fresco", madre: "3–5 días de forma natural",    tienda: "Semanas gracias a conservadores" },
+]
+
+const PANES_DESTACADOS = [
+  {
+    nombre: "Hogaza Natural",
+    descripcion: "El clásico de la casa. Corteza crujiente, miga esponjosa.",
+    ingredientes: ["Harina natural", "Agua", "Sal de mar", "Masa madre «Martes»"],
+    imagen: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600&h=400&fit=crop&auto=format&q=80",
+    bgColor: "#8b4f24",
+  },
+  {
+    nombre: "Capricho",
+    descripcion: "Nuestra mezcla más festiva y compleja.",
+    ingredientes: ["Pasas", "Canela", "Arándano", "Nuez", "Pepitas de calabaza"],
+    imagen: "https://images.unsplash.com/photo-1586444248902-2f64eddc13df?w=600&h=400&fit=crop&auto=format&q=80",
+    bgColor: "#6b3a1a",
+  },
+  {
+    nombre: "Chocolate y Almendra",
+    descripcion: "El favorito de los amantes del chocolate.",
+    ingredientes: ["Chocolate oscuro artesanal", "Almendra entera", "Harina integral", "Masa madre"],
+    imagen: "https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=600&h=400&fit=crop&auto=format&q=80",
+    bgColor: "#3d2b1f",
+  },
+]
+
+// ─── Flip card ────────────────────────────────────────────────────────────────
+
+function FlipCard({ pan }: { pan: typeof PANES_DESTACADOS[0] }) {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+    <div className="flip-card h-80 cursor-pointer">
+      <div className="flip-card-inner">
+
+        {/* Frente — imagen + nombre */}
+        <div className="flip-card-front">
+          <div className="relative w-full h-full">
             <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+              src={pan.imagen}
+              alt={pan.nombre}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 33vw"
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            {/* Gradiente inferior para legibilidad */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
+            <div className="absolute bottom-0 left-0 right-0 p-5">
+              <p className="font-serif font-bold text-white text-xl leading-tight">{pan.nombre}</p>
+              <p className="text-white/70 text-xs mt-1">{pan.descripcion}</p>
+              <p className="text-white/50 text-xs mt-2 italic">Pasa el cursor para ver ingredientes →</p>
+            </div>
+          </div>
         </div>
-      </main>
+
+        {/* Reverso — ingredientes */}
+        <div
+          className="flip-card-back flex flex-col justify-center p-7"
+          style={{ background: `linear-gradient(135deg, ${pan.bgColor}, #1a0f0a)` }}
+        >
+          <p className="text-white/50 text-xs uppercase tracking-widest mb-4 font-semibold">
+            Ingredientes principales
+          </p>
+          <ul className="space-y-2.5 mb-6">
+            {pan.ingredientes.map((ing) => (
+              <li key={ing} className="flex items-center gap-3 text-white text-sm">
+                <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-pan-300)] shrink-0" />
+                {ing}
+              </li>
+            ))}
+          </ul>
+          <Link
+            href="/catalogo"
+            className="text-center bg-white/15 hover:bg-white/25 text-white text-xs font-semibold
+                       py-2.5 px-5 rounded-full transition-colors border border-white/20"
+          >
+            Ver en catálogo →
+          </Link>
+        </div>
+      </div>
     </div>
-  );
+  )
+}
+
+// ─── Página ───────────────────────────────────────────────────────────────────
+
+export default function HomePage() {
+  return (
+    <>
+      <Navbar />
+      <main className="flex-1">
+
+        {/* ── Hero — vida saludable ── */}
+        <section className="relative min-h-[88vh] flex items-center justify-center overflow-hidden bg-[var(--color-pan-900)]">
+          {/* Textura de puntos */}
+          <div className="absolute inset-0 opacity-[0.07]"
+            style={{ backgroundImage: "radial-gradient(#fdf6ec 1.2px, transparent 1.2px)", backgroundSize: "28px 28px" }} />
+
+          <div className="relative z-10 max-w-4xl mx-auto px-6 text-center py-24">
+            {/* Etiqueta superior */}
+            <div className="inline-flex items-center gap-2 bg-[var(--color-pan-700)]/60 border border-[var(--color-pan-500)]/40
+                            text-[var(--color-pan-300)] text-xs font-medium px-4 py-2 rounded-full mb-8 backdrop-blur-sm">
+              <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+              Horneado a mano, sin conservadores
+            </div>
+
+            {/* Titular principal */}
+            <h1 className="font-serif text-5xl md:text-7xl font-bold text-white leading-[1.08] mb-6">
+              Alimenta tu vida<br />
+              <span className="text-[var(--color-pan-300)]">con lo que merece</span>
+            </h1>
+
+            <p className="text-[var(--color-pan-200)] text-lg md:text-xl max-w-2xl mx-auto leading-relaxed mb-4">
+              El pan que comes todos los días importa más de lo que crees.
+              Masa madre viva, fermentación natural y cero conservadores —
+              porque tu bienestar empieza en cada rebanada.
+            </p>
+
+            {/* Badges de propuesta de valor */}
+            <div className="flex flex-wrap gap-3 justify-center mb-10 mt-6">
+              {["Sin conservadores", "Fácil de digerir", "Energía duradera", "Hecho a mano"].map((tag) => (
+                <span key={tag}
+                  className="text-xs font-medium px-4 py-1.5 rounded-full border border-[var(--color-pan-500)]/50
+                             text-[var(--color-pan-300)] bg-[var(--color-pan-800)]/50">
+                  ✦ {tag}
+                </span>
+              ))}
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link href="/catalogo"
+                className="bg-[var(--color-pan-400)] hover:bg-[var(--color-pan-300)] text-[var(--color-pan-900)]
+                           font-bold px-9 py-4 rounded-full text-base transition-all hover:scale-105 shadow-lg">
+                Ver catálogo
+              </Link>
+              <Link href="/configurador"
+                className="border-2 border-[var(--color-pan-500)] text-[var(--color-pan-100)]
+                           hover:bg-[var(--color-pan-700)] font-semibold px-9 py-4 rounded-full text-base transition-all">
+                🎨 Arma tu pan
+              </Link>
+            </div>
+          </div>
+
+          {/* Ola inferior */}
+          <div className="absolute bottom-0 left-0 right-0">
+            <svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" className="w-full h-12 fill-[var(--color-pan-100)]">
+              <path d="M0,40 C360,60 1080,20 1440,40 L1440,60 L0,60 Z" />
+            </svg>
+          </div>
+        </section>
+
+        {/* ── Beneficios del pan de masa madre ── */}
+        <section className="py-20 px-6 max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <p className="text-[var(--color-pan-500)] text-xs uppercase tracking-widest font-semibold mb-2">Salud y bienestar</p>
+            <h2 className="font-serif text-3xl md:text-4xl font-bold text-[var(--color-pan-800)] mb-4">
+              ¿Por qué comer pan de masa madre?
+            </h2>
+            <p className="text-[var(--color-pan-500)] max-w-xl mx-auto text-sm">
+              Lo que comes todos los días te define más de lo que crees.
+              Un pequeño cambio en tu pan puede hacer una diferencia real en cómo te sientes.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {BENEFICIOS.map(({ emoji, titulo, desc }) => (
+              <div key={titulo}
+                className="bg-white rounded-2xl p-6 border border-[var(--color-pan-200)]
+                           hover:shadow-md hover:border-[var(--color-pan-300)] transition-all">
+                <span className="text-4xl mb-4 block">{emoji}</span>
+                <h3 className="font-serif text-lg font-semibold text-[var(--color-pan-800)] mb-2">{titulo}</h3>
+                <p className="text-[var(--color-pan-500)] text-sm leading-relaxed">{desc}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ── Masa madre vs tienda ── */}
+        <section className="py-20 px-6 bg-[var(--color-pan-900)]">
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-12">
+              <p className="text-[var(--color-pan-400)] text-xs uppercase tracking-widest font-semibold mb-2">La diferencia importa</p>
+              <h2 className="font-serif text-3xl md:text-4xl font-bold text-white mb-4">
+                Pan de masa madre vs pan de tienda
+              </h2>
+              <p className="text-[var(--color-pan-300)] max-w-xl mx-auto text-sm">
+                No tienes que estudiar nutrición para notar la diferencia.
+                Solo prueba uno y luego el otro. Tu cuerpo te va a decir cuál prefiere.
+              </p>
+            </div>
+            <div className="overflow-x-auto rounded-2xl border border-[var(--color-pan-700)]">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="bg-[var(--color-pan-800)]">
+                    <th className="text-left px-5 py-4 text-[var(--color-pan-300)] font-semibold w-1/3">Aspecto</th>
+                    <th className="text-center px-5 py-4 text-[var(--color-pan-200)] font-semibold">🏠 Masa madre artesanal</th>
+                    <th className="text-center px-5 py-4 text-[var(--color-pan-400)] font-semibold">🏭 Pan de supermercado</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {COMPARACION.map((row, i) => (
+                    <tr key={row.aspecto} className={i % 2 === 0 ? "bg-[var(--color-pan-800)]/40" : "bg-[var(--color-pan-800)]/20"}>
+                      <td className="px-5 py-3.5 text-[var(--color-pan-300)] font-medium">{row.aspecto}</td>
+                      <td className="px-5 py-3.5 text-center text-green-400 font-medium">{row.madre}</td>
+                      <td className="px-5 py-3.5 text-center text-[var(--color-pan-400)]">{row.tienda}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        {/* ── Panes más comprados — flip cards con imagen ── */}
+        <section className="py-20 px-6 max-w-5xl mx-auto">
+          <div className="text-center mb-12">
+            <p className="text-[var(--color-pan-500)] text-xs uppercase tracking-widest font-semibold mb-2">Los favoritos</p>
+            <h2 className="font-serif text-3xl md:text-4xl font-bold text-[var(--color-pan-800)] mb-4">
+              Panes más comprados
+            </h2>
+            <p className="text-[var(--color-pan-500)] max-w-md mx-auto text-sm">
+              Pasa el cursor sobre cada pan para descubrir sus ingredientes.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            {PANES_DESTACADOS.map((pan) => (
+              <FlipCard key={pan.nombre} pan={pan} />
+            ))}
+          </div>
+        </section>
+
+        {/* ── Historia ── */}
+        <section className="py-20 px-6 bg-[var(--color-pan-200)]">
+          <div className="max-w-4xl mx-auto">
+            <div className="flex flex-col md:flex-row items-center gap-12">
+              {/* Frasco Martes */}
+              <div className="shrink-0 flex flex-col items-center gap-3">
+                <div className="relative w-40 h-40">
+                  {/* Frasco ilustrado */}
+                  <div className="w-40 h-40 rounded-full bg-[var(--color-pan-100)] border-4 border-[var(--color-pan-500)]
+                                  shadow-xl flex flex-col items-center justify-center gap-1">
+                    <span className="text-5xl">🫙</span>
+                    <p className="font-serif font-bold text-[var(--color-pan-800)] text-sm">«Martes»</p>
+                    <p className="text-[var(--color-pan-400)] text-[10px] italic">Desde: 6-05-25</p>
+                  </div>
+                  {/* Burbujas de fermentación */}
+                  <span className="absolute -top-1 -right-1 text-lg animate-bounce">✨</span>
+                </div>
+                <p className="text-[var(--color-pan-600)] text-xs text-center max-w-[140px] italic">
+                  Nuestro fermento vivo que da sabor a cada pan
+                </p>
+              </div>
+
+              {/* Texto */}
+              <div>
+                <p className="text-[var(--color-pan-500)] text-xs uppercase tracking-widest font-semibold mb-2">Nuestra historia</p>
+                <h2 className="font-serif text-2xl md:text-3xl font-bold text-[var(--color-pan-800)] mb-6">
+                  El origen de un sueño<br />que se amasa cada día
+                </h2>
+                <div className="space-y-4 text-[var(--color-pan-700)] leading-relaxed text-sm">
+                  <p>
+                    Esta historia comienza con la llegada de nuestro querido <strong className="text-[var(--color-pan-900)]">«Martes»</strong> —
+                    el nombre de nuestra primera masa madre, un fermento vivo que guarda el alma de El Horno de María.
+                    Su nombre nació en un día de tranquilidad y felicidad, con la emoción de compartir con nuestra familia
+                    y vecinos una nueva opción: un pan saludable, delicioso y, sobre todo, hecho con un amor inmenso.
+                  </p>
+                  <p>
+                    En «Martes» no solo vive una fermentación natural, libre de conservadores. En él vive el amor
+                    y la dedicación de una madre de familia que lo cuida como a un miembro más, para después compartir
+                    su magia con sus seres queridos y con cada persona dispuesta a unirse a este bonito círculo.
+                  </p>
+                  <p>
+                    Cada pan que sale de nuestro horno lleva consigo la esencia de «Martes» y el corazón de nuestra
+                    familia. No es solo un alimento, es un lazo que se crea. Gracias por permitirnos llegar a tu mesa,
+                    por valorar lo hecho en casa y por formar parte de este sueño que se amasa cada día.
+                  </p>
+                  <p className="font-serif text-base font-semibold text-[var(--color-pan-800)] pt-2 border-t border-[var(--color-pan-300)]">
+                    Bienvenido a la familia de El Horno de María. 🍞
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── CTA Configurador ── */}
+        <section className="py-20 px-6 bg-[var(--color-pan-800)]">
+          <div className="max-w-3xl mx-auto text-center">
+            <h2 className="font-serif text-3xl md:text-4xl font-bold text-white mb-4">
+              Diseña el pan de tus sueños 🍞
+            </h2>
+            <p className="text-[var(--color-pan-300)] text-base mb-8 max-w-xl mx-auto">
+              Elige el tipo, los ingredientes y mira cómo queda en tiempo real.
+              Caja, hogaza, baguette o pizza — tú decides.
+            </p>
+            <Link href="/configurador"
+              className="inline-block bg-[var(--color-pan-400)] hover:bg-[var(--color-pan-300)] text-[var(--color-pan-900)]
+                         font-bold px-10 py-4 rounded-full text-lg transition-all hover:scale-105 shadow-lg">
+              Empezar a configurar →
+            </Link>
+          </div>
+        </section>
+
+        {/* ── ¿Cómo funciona? ── */}
+        <section className="py-20 px-6 max-w-5xl mx-auto">
+          <h2 className="font-serif text-3xl font-bold text-center text-[var(--color-pan-800)] mb-14">
+            ¿Cómo hacer tu pedido?
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+            {[
+              { paso: "1", emoji: "🛒", texto: "Elige del catálogo o crea tu pan personalizado" },
+              { paso: "2", emoji: "📋", texto: "Revisa tu resumen y llena tus datos de entrega" },
+              { paso: "3", emoji: "💬", texto: "Envíanos el pedido por WhatsApp con un clic" },
+              { paso: "4", emoji: "🎉", texto: "Tu pan recién horneado listo al día siguiente" },
+            ].map(({ paso, emoji, texto }) => (
+              <div key={paso} className="flex flex-col items-center text-center gap-3">
+                <div className="w-14 h-14 rounded-full bg-[var(--color-pan-700)] text-white font-serif
+                                text-2xl font-bold flex items-center justify-center shadow">
+                  {paso}
+                </div>
+                <span className="text-3xl">{emoji}</span>
+                <p className="text-[var(--color-pan-600)] text-sm leading-relaxed">{texto}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+      </main>
+
+      <footer className="bg-[var(--color-pan-900)] text-[var(--color-pan-300)] text-center py-8 text-sm">
+        <p className="font-serif text-base font-semibold text-[var(--color-pan-100)] mb-1">El Horno de María</p>
+        <p className="text-[var(--color-pan-400)] text-xs mb-2">Pan artesanal de masa madre · Hecho a mano con amor</p>
+        <p className="text-[var(--color-pan-500)] text-xs">Pedidos con 1 día de anticipación · Pago al recibir</p>
+      </footer>
+    </>
+  )
 }
