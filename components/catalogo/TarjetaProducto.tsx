@@ -15,19 +15,17 @@ export default function TarjetaProducto({ producto }: { producto: ProductoCatalo
 
   function handleAgregar() {
     const nombre = `${producto.nombre}${integral ? " (Integral)" : ""}`
-    for (let i = 0; i < cantidad; i++) {
-      agregarProductoCatalogo({
-        id: `${producto.id}-${integral ? "int" : "nat"}-${Date.now()}-${i}`,
-        nombre,
-        descripcion: producto.descripcion ?? "",
-        ingredientes: [],
-        precio,
-        imagen_url: "",
-        valor_nutrimental: { calorias: 0, proteinas: 0, carbohidratos: 0, grasas: 0, fibra: 0, sodio: 0 },
-        disponible: true,
-        created_at: new Date().toISOString(),
-      })
-    }
+    agregarProductoCatalogo({
+      id: `${producto.id}-${integral ? "int" : "nat"}`,
+      nombre,
+      descripcion: producto.descripcion ?? "",
+      ingredientes: [],
+      precio,
+      imagen_url: "",
+      valor_nutrimental: { calorias: 0, proteinas: 0, carbohidratos: 0, grasas: 0, fibra: 0, sodio: 0 },
+      disponible: true,
+      created_at: new Date().toISOString(),
+    }, cantidad)
     setAgregado(true)
     setTimeout(() => setAgregado(false), 3000)
   }

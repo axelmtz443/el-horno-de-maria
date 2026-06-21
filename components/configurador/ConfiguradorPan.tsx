@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import Link from "next/link"
 import { useCarritoStore } from "@/lib/store/carritoStore"
 import VisualizadorPan from "./VisualizadorPan"
 import { CONFIGURADOR_TIPOS, PRECIO_INTEGRAL, type ConfiguradorTipo, type Ingrediente } from "@/lib/data/configurador"
@@ -46,21 +47,23 @@ export default function ConfiguradorPan() {
       nombresIng ? `· ${nombresIng}` : "",
     ].filter(Boolean).join(" ")
 
-    for (let i = 0; i < cantidad; i++) {
-      agregarProductoCatalogo({
-        id: `config-${tipo.tipo}-${Date.now()}-${i}`,
-        nombre,
-        descripcion: "Pan configurado a tu gusto",
-        ingredientes: [],
-        precio: precioUnitario,
-        imagen_url: "",
-        valor_nutrimental: { calorias: 0, proteinas: 0, carbohidratos: 0, grasas: 0, fibra: 0, sodio: 0 },
-        disponible: true,
-        created_at: new Date().toISOString(),
-      })
-    }
+    // ID estable basado en la configuración para que el store pueda agrupar
+    const idConfig = `config-${tipo.tipo}-${integral ? "int" : "nat"}-${seleccionados.map((i) => i.id).sort().join("_")}`
+
+    agregarProductoCatalogo({
+      id: idConfig,
+      nombre,
+      descripcion: "Pan configurado a tu gusto",
+      ingredientes: [],
+      precio: precioUnitario,
+      imagen_url: "",
+      valor_nutrimental: { calorias: 0, proteinas: 0, carbohidratos: 0, grasas: 0, fibra: 0, sodio: 0 },
+      disponible: true,
+      created_at: new Date().toISOString(),
+    }, cantidad)
+
     setAgregado(true)
-    setTimeout(() => setAgregado(false), 2500)
+    setTimeout(() => setAgregado(false), 3000)
   }
 
   function resetear() {
@@ -282,6 +285,20 @@ export default function ConfiguradorPan() {
               </button>
             )}
           </div>
+
+          {/* Botón ver pedido — aparece tras agregar */}
+          {agregado && paso === 1 && (
+            <div className="mt-4 flex justify-end">
+              <Link
+                href="/pedido"
+                className="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold
+                           bg-[var(--color-pan-100)] hover:bg-[var(--color-pan-200)]
+                           text-[var(--color-pan-700)] border border-[var(--color-pan-300)] transition-colors"
+              >
+                🛒 Ver mi pedido →
+              </Link>
+            </div>
+          )}
         </div>
 
         {/* ── Vista previa ── */}
