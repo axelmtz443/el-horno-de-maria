@@ -1,6 +1,6 @@
 import Link from "next/link"
-import Image from "next/image"
 import Navbar from "@/components/ui/Navbar"
+import PanesDestacados from "@/components/home/PanesDestacados"
 
 // ─── Datos ────────────────────────────────────────────────────────────────────
 
@@ -23,86 +23,6 @@ const COMPARACION = [
   { aspecto: "Cuánto dura fresco", madre: "3–5 días de forma natural",    tienda: "Semanas gracias a conservadores" },
 ]
 
-const PANES_DESTACADOS = [
-  {
-    nombre: "Hogaza Natural",
-    descripcion: "El clásico de la casa. Corteza crujiente, miga esponjosa.",
-    ingredientes: ["Harina natural", "Agua", "Sal de mar", "Masa madre «Martes»"],
-    imagen: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600&h=400&fit=crop&auto=format&q=80",
-    bgColor: "#8b4f24",
-  },
-  {
-    nombre: "Capricho",
-    descripcion: "Nuestra mezcla más festiva y compleja.",
-    ingredientes: ["Pasas", "Canela", "Arándano", "Nuez", "Pepitas de calabaza"],
-    imagen: "https://images.unsplash.com/photo-1586444248902-2f64eddc13df?w=600&h=400&fit=crop&auto=format&q=80",
-    bgColor: "#6b3a1a",
-  },
-  {
-    nombre: "Chocolate y Almendra",
-    descripcion: "El favorito de los amantes del chocolate.",
-    ingredientes: ["Chocolate oscuro artesanal", "Almendra entera", "Harina integral", "Masa madre"],
-    imagen: "https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=600&h=400&fit=crop&auto=format&q=80",
-    bgColor: "#3d2b1f",
-  },
-]
-
-// ─── Flip card ────────────────────────────────────────────────────────────────
-
-function FlipCard({ pan }: { pan: typeof PANES_DESTACADOS[0] }) {
-  return (
-    <div className="flip-card h-80 cursor-pointer">
-      <div className="flip-card-inner">
-
-        {/* Frente — imagen + nombre */}
-        <div className="flip-card-front">
-          <div className="relative w-full h-full">
-            <Image
-              src={pan.imagen}
-              alt={pan.nombre}
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 33vw"
-            />
-            {/* Gradiente inferior para legibilidad */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
-            <div className="absolute bottom-0 left-0 right-0 p-5">
-              <p className="font-serif font-bold text-white text-xl leading-tight">{pan.nombre}</p>
-              <p className="text-white/70 text-xs mt-1">{pan.descripcion}</p>
-              <p className="text-white/50 text-xs mt-2 italic">Pasa el cursor para ver ingredientes →</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Reverso — ingredientes */}
-        <div
-          className="flip-card-back flex flex-col justify-center p-7"
-          style={{ background: `linear-gradient(135deg, ${pan.bgColor}, #1a0f0a)` }}
-        >
-          <p className="text-white/50 text-xs uppercase tracking-widest mb-4 font-semibold">
-            Ingredientes principales
-          </p>
-          <ul className="space-y-2.5 mb-6">
-            {pan.ingredientes.map((ing) => (
-              <li key={ing} className="flex items-center gap-3 text-white text-sm">
-                <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-pan-300)] shrink-0" />
-                {ing}
-              </li>
-            ))}
-          </ul>
-          <Link
-            href="/catalogo"
-            className="text-center bg-white/15 hover:bg-white/25 text-white text-xs font-semibold
-                       py-2.5 px-5 rounded-full transition-colors border border-white/20"
-          >
-            Ver en catálogo →
-          </Link>
-        </div>
-      </div>
-    </div>
-  )
-}
-
 // ─── Página ───────────────────────────────────────────────────────────────────
 
 export default function HomePage() {
@@ -111,21 +31,18 @@ export default function HomePage() {
       <Navbar />
       <main className="flex-1">
 
-        {/* ── Hero — vida saludable ── */}
+        {/* ── Hero ── */}
         <section className="relative min-h-[88vh] flex items-center justify-center overflow-hidden bg-[var(--color-pan-900)]">
-          {/* Textura de puntos */}
           <div className="absolute inset-0 opacity-[0.07]"
             style={{ backgroundImage: "radial-gradient(#fdf6ec 1.2px, transparent 1.2px)", backgroundSize: "28px 28px" }} />
 
           <div className="relative z-10 max-w-4xl mx-auto px-6 text-center py-24">
-            {/* Etiqueta superior */}
             <div className="inline-flex items-center gap-2 bg-[var(--color-pan-700)]/60 border border-[var(--color-pan-500)]/40
                             text-[var(--color-pan-300)] text-xs font-medium px-4 py-2 rounded-full mb-8 backdrop-blur-sm">
               <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
               Horneado a mano, sin conservadores
             </div>
 
-            {/* Titular principal */}
             <h1 className="font-serif text-5xl md:text-7xl font-bold text-white leading-[1.08] mb-6">
               Alimenta tu vida<br />
               <span className="text-[var(--color-pan-300)]">con lo que merece</span>
@@ -137,7 +54,6 @@ export default function HomePage() {
               porque tu bienestar empieza en cada rebanada.
             </p>
 
-            {/* Badges de propuesta de valor */}
             <div className="flex flex-wrap gap-3 justify-center mb-10 mt-6">
               {["Sin conservadores", "Fácil de digerir", "Energía duradera", "Hecho a mano"].map((tag) => (
                 <span key={tag}
@@ -162,13 +78,15 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Ola inferior */}
           <div className="absolute bottom-0 left-0 right-0">
             <svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" className="w-full h-12 fill-[var(--color-pan-100)]">
               <path d="M0,40 C360,60 1080,20 1440,40 L1440,60 L0,60 Z" />
             </svg>
           </div>
         </section>
+
+        {/* ── Panes más comprados (justo bajo el Hero) ── */}
+        <PanesDestacados />
 
         {/* ── Beneficios del pan de masa madre ── */}
         <section className="py-20 px-6 max-w-6xl mx-auto">
@@ -231,39 +149,18 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ── Panes más comprados — flip cards con imagen ── */}
-        <section className="py-20 px-6 max-w-5xl mx-auto">
-          <div className="text-center mb-12">
-            <p className="text-[var(--color-pan-500)] text-xs uppercase tracking-widest font-semibold mb-2">Los favoritos</p>
-            <h2 className="font-serif text-3xl md:text-4xl font-bold text-[var(--color-pan-800)] mb-4">
-              Panes más comprados
-            </h2>
-            <p className="text-[var(--color-pan-500)] max-w-md mx-auto text-sm">
-              Pasa el cursor sobre cada pan para descubrir sus ingredientes.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            {PANES_DESTACADOS.map((pan) => (
-              <FlipCard key={pan.nombre} pan={pan} />
-            ))}
-          </div>
-        </section>
-
-        {/* ── Historia ── */}
+        {/* ── Historia de Martes ── */}
         <section className="py-20 px-6 bg-[var(--color-pan-200)]">
           <div className="max-w-4xl mx-auto">
             <div className="flex flex-col md:flex-row items-center gap-12">
-              {/* Frasco Martes */}
               <div className="shrink-0 flex flex-col items-center gap-3">
                 <div className="relative w-40 h-40">
-                  {/* Frasco ilustrado */}
                   <div className="w-40 h-40 rounded-full bg-[var(--color-pan-100)] border-4 border-[var(--color-pan-500)]
                                   shadow-xl flex flex-col items-center justify-center gap-1">
                     <span className="text-5xl">🫙</span>
                     <p className="font-serif font-bold text-[var(--color-pan-800)] text-sm">«Martes»</p>
                     <p className="text-[var(--color-pan-400)] text-[10px] italic">Desde: 6-05-25</p>
                   </div>
-                  {/* Burbujas de fermentación */}
                   <span className="absolute -top-1 -right-1 text-lg animate-bounce">✨</span>
                 </div>
                 <p className="text-[var(--color-pan-600)] text-xs text-center max-w-[140px] italic">
@@ -271,7 +168,6 @@ export default function HomePage() {
                 </p>
               </div>
 
-              {/* Texto */}
               <div>
                 <p className="text-[var(--color-pan-500)] text-xs uppercase tracking-widest font-semibold mb-2">Nuestra historia</p>
                 <h2 className="font-serif text-2xl md:text-3xl font-bold text-[var(--color-pan-800)] mb-6">
@@ -321,7 +217,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ── ¿Cómo funciona? ── */}
+        {/* ── ¿Cómo hacer tu pedido? ── */}
         <section className="py-20 px-6 max-w-5xl mx-auto">
           <h2 className="font-serif text-3xl font-bold text-center text-[var(--color-pan-800)] mb-14">
             ¿Cómo hacer tu pedido?
@@ -329,7 +225,7 @@ export default function HomePage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
             {[
               { paso: "1", emoji: "🛒", texto: "Elige del catálogo o crea tu pan personalizado" },
-              { paso: "2", emoji: "📋", texto: "Revisa tu resumen y llena tus datos de entrega" },
+              { paso: "2", emoji: "📋", texto: "Revisa tu selección en Mi Pedido" },
               { paso: "3", emoji: "💬", texto: "Envíanos el pedido por WhatsApp con un clic" },
               { paso: "4", emoji: "🎉", texto: "Tu pan recién horneado listo al día siguiente" },
             ].map(({ paso, emoji, texto }) => (
