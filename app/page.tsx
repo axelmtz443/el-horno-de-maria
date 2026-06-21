@@ -316,7 +316,7 @@ export default function HomePage() {
             <Link href="/configurador"
               className="inline-block bg-[var(--color-pan-400)] hover:bg-[var(--color-pan-300)] text-[var(--color-pan-900)]
                          font-bold px-10 py-4 rounded-full text-lg transition-all hover:scale-105 shadow-lg">
-              Empezar a configurar →
+              Empezar a crear →
             </Link>
           </div>
         </section>
