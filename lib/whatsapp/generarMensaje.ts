@@ -1,12 +1,8 @@
-import type { DatosCliente, ItemCarrito } from "@/types"
+import type { ItemCarrito } from "@/types"
 
 const TELEFONO_PANADERIA = process.env.NEXT_PUBLIC_WHATSAPP_TELEFONO ?? "521XXXXXXXXXX"
 
-export function generarLinkWhatsApp(
-  cliente: DatosCliente,
-  items: ItemCarrito[],
-  total: number
-): string {
+export function generarLinkWhatsApp(items: ItemCarrito[], total: number): string {
   const lineasItems = items.map((item) => {
     if (item.tipo === "catalogo" && item.producto) {
       return `• ${item.cantidad}x ${item.producto.nombre} — $${(item.precio_unitario * item.cantidad).toFixed(2)}`
@@ -26,20 +22,14 @@ export function generarLinkWhatsApp(
   }).filter(Boolean).join("\n")
 
   const mensaje = `
-🥖 *Nuevo pedido - Panadería Artesanal*
+🥖 *Pedido - El Horno de María*
 
-👤 *Cliente:* ${cliente.nombre}
-📱 *Teléfono:* ${cliente.telefono}
-📅 *Fecha de entrega:* ${cliente.fecha_entrega}${cliente.hora_entrega ? ` a las ${cliente.hora_entrega}` : ""}
-
-*🛒 Pedido:*
+*🛒 Mi pedido:*
 ${lineasItems}
 
 💰 *Total estimado:* $${total.toFixed(2)} MXN
 
-${cliente.notas_generales ? `📝 *Notas:* ${cliente.notas_generales}` : ""}
-
-_Pedido generado desde la web_
+_Enviado desde la web_
 `.trim()
 
   return `https://wa.me/${TELEFONO_PANADERIA}?text=${encodeURIComponent(mensaje)}`

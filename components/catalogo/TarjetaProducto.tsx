@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import Link from "next/link"
 import { useCarritoStore } from "@/lib/store/carritoStore"
 import type { ProductoCatalogo } from "@/lib/data/catalogo"
 
@@ -28,7 +29,7 @@ export default function TarjetaProducto({ producto }: { producto: ProductoCatalo
       })
     }
     setAgregado(true)
-    setTimeout(() => setAgregado(false), 2000)
+    setTimeout(() => setAgregado(false), 3000)
   }
 
   return (
@@ -84,9 +85,22 @@ export default function TarjetaProducto({ producto }: { producto: ProductoCatalo
               ? "bg-green-600 text-white"
               : "bg-[var(--color-pan-700)] hover:bg-[var(--color-pan-800)] text-white"}`}
         >
-          {agregado ? "✓" : "+ Agregar"}
+          {agregado ? "✓ Agregado" : "+ Agregar"}
         </button>
       </div>
+
+      {/* Botón ver pedido — aparece tras agregar */}
+      {agregado && (
+        <Link
+          href="/pedido"
+          className="w-full text-center text-xs font-semibold py-2 rounded-xl
+                     bg-[var(--color-pan-100)] hover:bg-[var(--color-pan-200)]
+                     text-[var(--color-pan-700)] border border-[var(--color-pan-300)]
+                     transition-all animate-fade-in"
+        >
+          🛒 Ver mi pedido →
+        </Link>
+      )}
     </div>
   )
 }
