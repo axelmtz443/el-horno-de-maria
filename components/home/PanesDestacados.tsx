@@ -29,7 +29,7 @@ const PANES = [
     nombre: "El Fino 💅",
     descripcion: "Cereza, chocolate blanco, almendra y azúcar mascabado.",
     ingredientes: ["Cereza", "Chocolate blanco", "Almendra", "Azúcar mascabado", "Masa madre"],
-    imagen: "https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=600&h=400&fit=crop&auto=format&q=80",
+    imagen: "/el-fino.jpeg",
     bgColor: "#3d2b1f",
     precio: 150,
   },

@@ -1,6 +1,8 @@
 import Link from "next/link"
 import Navbar from "@/components/ui/Navbar"
 import PanesDestacados from "@/components/home/PanesDestacados"
+import TiposDeUso from "@/components/home/TiposDeUso"
+import FAQ from "@/components/home/FAQ"
 
 // ─── Datos ────────────────────────────────────────────────────────────────────
 
@@ -198,6 +200,12 @@ export default function HomePage() {
             </div>
           </div>
         </section>
+
+        {/* ── Tipos de uso ── */}
+        <TiposDeUso />
+
+        {/* ── FAQ ── */}
+        <FAQ />
 
         {/* ── CTA Configurador ── */}
         <section className="py-20 px-6 bg-[var(--color-pan-800)]">
