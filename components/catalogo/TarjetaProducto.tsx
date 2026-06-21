@@ -18,7 +18,7 @@ export default function TarjetaProducto({ producto }: { producto: ProductoCatalo
       agregarProductoCatalogo({
         id: `${producto.id}-${integral ? "int" : "nat"}-${Date.now()}-${i}`,
         nombre,
-        descripcion: producto.descripcion,
+        descripcion: producto.descripcion ?? "",
         ingredientes: [],
         precio,
         imagen_url: "",
