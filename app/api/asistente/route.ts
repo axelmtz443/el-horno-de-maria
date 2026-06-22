@@ -73,7 +73,7 @@ export async function POST(req: Request) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          system: INSTRUCCION_SISTEMA,
+          systemInstruction: { parts: [{ text: INSTRUCCION_SISTEMA }] },
           contents,
           generationConfig: { maxOutputTokens: 300, temperature: 0.7 },
         }),
