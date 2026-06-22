@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     locale: "es_MX",
     images: [
       {
-        url: "/martes.png",
+        url: "/logo.png",
         width: 1200,
         height: 630,
         alt: "El Horno de María — Pan artesanal de masa madre",
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "El Horno de María | Pan artesanal de masa madre",
     description: "Pan artesanal hecho con masa madre, sin conservadores.",
-    images: ["/martes.png"],
+    images: ["/logo.png"],
   },
   icons: {
     icon: [{ url: "/logo.png", type: "image/png" }],

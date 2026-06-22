@@ -20,9 +20,10 @@ const COMPARACION = [
   { aspecto: "Cómo se hace",       madre: "A mano, con paciencia",        tienda: "Proceso industrial acelerado" },
   { aspecto: "Conservadores",      madre: "Ninguno",                      tienda: "Sí — para durar semanas en anaquel" },
   { aspecto: "Cómo te cae",        madre: "Ligero, sin malestar",         tienda: "Pesado, puede hinchar" },
-  { aspecto: "Energía que te da",  madre: "Duradera y estable",           tienda: "Rápida y con bajón después" },
-  { aspecto: "Sabor",              madre: "Profundo, con carácter",       tienda: "Igual siempre, sin personalidad" },
-  { aspecto: "Cuánto dura fresco", madre: "3–5 días de forma natural",    tienda: "Semanas gracias a conservadores" },
+  { aspecto: "Aceite de soya",      madre: "Depende del pan — algunos llevan",                                            tienda: "Sí — presente en la mayoría" },
+  { aspecto: "Energía que te da",  madre: "Duradera y estable",                                                          tienda: "Rápida y con bajón después" },
+  { aspecto: "Sabor",              madre: "Profundo, con carácter",                                                       tienda: "Igual siempre, sin personalidad" },
+  { aspecto: "Cuánto dura fresco", madre: "3–5 días natural · hasta 15 días refrigerado · 3–6 meses en congelador",      tienda: "Semanas gracias a conservadores" },
 ]
 
 // ─── Página ───────────────────────────────────────────────────────────────────
@@ -71,11 +72,6 @@ export default function HomePage() {
                 className="bg-[var(--color-pan-400)] hover:bg-[var(--color-pan-300)] text-[var(--color-pan-900)]
                            font-bold px-9 py-4 rounded-full text-base transition-all hover:scale-105 shadow-lg">
                 Ver catálogo
-              </Link>
-              <Link href="/configurador"
-                className="border-2 border-[var(--color-pan-500)] text-[var(--color-pan-100)]
-                           hover:bg-[var(--color-pan-700)] font-semibold px-9 py-4 rounded-full text-base transition-all">
-                🎨 Arma tu pan
               </Link>
             </div>
           </div>
@@ -235,7 +231,7 @@ export default function HomePage() {
               { paso: "1", emoji: "🛒", texto: "Elige del catálogo o crea tu pan personalizado" },
               { paso: "2", emoji: "📋", texto: "Revisa tu selección en Mi Pedido" },
               { paso: "3", emoji: "💬", texto: "Envíanos el pedido por WhatsApp con un clic" },
-              { paso: "4", emoji: "🎉", texto: "Tu pan recién horneado listo al día siguiente" },
+              { paso: "4", emoji: "🎉", texto: "Tu pan recién horneado en 24 a 36 horas — gastos de envío no incluidos" },
             ].map(({ paso, emoji, texto }) => (
               <div key={paso} className="flex flex-col items-center text-center gap-3">
                 <div className="w-14 h-14 rounded-full bg-[var(--color-pan-700)] text-white font-serif
@@ -254,7 +250,7 @@ export default function HomePage() {
       <footer className="bg-[var(--color-pan-900)] text-[var(--color-pan-300)] text-center py-8 text-sm">
         <p className="font-serif text-base font-semibold text-[var(--color-pan-100)] mb-1">El Horno de María</p>
         <p className="text-[var(--color-pan-400)] text-xs mb-2">Pan artesanal de masa madre · Hecho a mano con amor</p>
-        <p className="text-[var(--color-pan-500)] text-xs">Pedidos con 1 día de anticipación · Pago al recibir</p>
+        <p className="text-[var(--color-pan-500)] text-xs">Anticipación de 24 a 36 horas · Gastos de envío no incluidos · Pago al recibir</p>
       </footer>
     </>
   )

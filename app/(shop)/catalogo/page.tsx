@@ -115,7 +115,20 @@ export default function CatalogoPage() {
   const [tipActivo,   setTipActivo]   = useState<TipoPan>("caja")
   const [saborActivo, setSaborActivo] = useState<"salado" | "dulce">("salado")
   const [catActiva,   setCatActiva]   = useState<string | null>(null)
+  const [overrides,   setOverrides]   = useState<Map<string, Partial<ProductoCatalogo>>>(new Map())
   const tabBarRef = useRef<HTMLDivElement>(null)
+
+  // Cargar overrides del admin (si Supabase está configurado)
+  useEffect(() => {
+    fetch("/api/catalogo")
+      .then((r) => r.ok ? r.json() : [])
+      .then((data: Array<{ id: string } & Partial<ProductoCatalogo>>) => {
+        if (Array.isArray(data) && data.length > 0) {
+          setOverrides(new Map(data.map((o) => [o.id, o])))
+        }
+      })
+      .catch(() => {})
+  }, [])
 
   // Resetear filtros al cambiar de tipo de pan
   function cambiarTipo(tipo: TipoPan) {
@@ -131,7 +144,11 @@ export default function CatalogoPage() {
   }
 
   const seccion   = SECCIONES_CATALOGO.find((s) => s.tipo_pan === tipActivo)!
-  const productos = seccion.productos
+  // Aplicar overrides del admin sobre los datos estáticos
+  const productos = seccion.productos.map((p) => {
+    const ov = overrides.get(p.id)
+    return ov ? { ...p, ...ov } : p
+  })
 
   // Filtrar por sabor (solo en caja/hogaza)
   const productosSabor = HAS_SABOR.has(tipActivo)

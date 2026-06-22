@@ -55,7 +55,7 @@ export default function TarjetaProducto({ producto }: { producto: ProductoCatalo
           ${integral ? "bg-[var(--color-pan-600)] border-[var(--color-pan-600)]" : "border-[var(--color-pan-300)]"}`}>
           {integral && <span className="text-white text-[10px] font-bold">✓</span>}
         </span>
-        🌿 Integral +$5
+        🌿 Integral (alto en fibra) +$5
       </button>
 
       {/* Precio + cantidad + botón */}
