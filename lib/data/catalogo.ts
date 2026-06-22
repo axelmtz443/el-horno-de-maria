@@ -16,22 +16,17 @@ export interface ProductoCatalogo {
 
 // ─── Ingredientes ──────────────────────────────────────────────────────────────
 
-const BASE_MASA = ["Harina de trigo", "Agua", "Levadura", "Sal"]
-
 export function obtenerIngredientes(producto: ProductoCatalogo): string[] {
-  if (producto.categoria === "Básico") return BASE_MASA
-
-  if (producto.ingredientes) return [...BASE_MASA, ...producto.ingredientes]
+  if (producto.ingredientes && producto.ingredientes.length > 0) return producto.ingredientes
 
   if (producto.descripcion && producto.descripcion !== "Sin ingredientes adicionales") {
-    const extras = producto.descripcion
+    return producto.descripcion
       .split(/,| y /i)
       .map((s) => s.trim())
       .filter(Boolean)
-    return [...BASE_MASA, ...extras]
   }
 
-  return BASE_MASA
+  return []
 }
 
 function productosCaja(): ProductoCatalogo[] {

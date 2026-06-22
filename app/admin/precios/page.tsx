@@ -339,25 +339,29 @@ export default function AdminPreciosPage() {
   }
 
   async function toggleIngrediente(id: string, grupo: Grupo, disponible: boolean) {
-    const res = await fetch("/api/admin/configurador", {
+    // Actualizar estado local primero (optimista) para que la UI responda de inmediato
+    setOverrides((prev) => {
+      const filtered = prev.filter((o) => !(o.id === id && o.grupo === grupo))
+      const existing = prev.find((o) => o.id === id && o.grupo === grupo)
+      return [...filtered, {
+        ...(existing ?? { id, grupo, is_custom: false, nombre: null, sabor: null, precio: 0 }),
+        disponible,
+      }]
+    })
+    // Persistir en Supabase (requiere columna `disponible` en precios_ingredientes)
+    await fetch("/api/admin/configurador", {
       method: "PATCH", headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ tipo: "ingrediente", id, grupo, disponible }),
     })
-    if (res.ok) {
-      setOverrides((prev) => {
-        const filtered = prev.filter((o) => !(o.id === id && o.grupo === grupo))
-        const existing = prev.find((o) => o.id === id && o.grupo === grupo)
-        return [...filtered, { ...(existing ?? { id, grupo, is_custom: false, nombre: null, sabor: null, precio: 0 }), disponible }]
-      })
-    }
   }
 
   async function deleteIngrediente(id: string, grupo: Grupo) {
-    const res = await fetch("/api/admin/configurador", {
+    // Quitar de UI primero
+    setOverrides((prev) => prev.filter((o) => !(o.id === id && o.grupo === grupo)))
+    await fetch("/api/admin/configurador", {
       method: "DELETE", headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id, grupo }),
     })
-    if (res.ok) setOverrides((prev) => prev.filter((o) => !(o.id === id && o.grupo === grupo)))
   }
 
   async function addIngrediente(data: { nombre: string; precio: number; sabor: string }) {
