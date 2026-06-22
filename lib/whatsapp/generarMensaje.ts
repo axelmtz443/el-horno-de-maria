@@ -1,6 +1,6 @@
 import type { ItemCarrito } from "@/types"
 
-export const TELEFONO_PANADERIA = process.env.NEXT_PUBLIC_WHATSAPP_TELEFONO ?? "523313285457"
+export const TELEFONO_PANADERIA = process.env.NEXT_PUBLIC_WHATSAPP_TELEFONO ?? "5213313285457"
 
 export function generarLinkWhatsApp(items: ItemCarrito[], total: number): string {
   const lineasItems = items.map((item) => {
