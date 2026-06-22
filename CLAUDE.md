@@ -2,6 +2,19 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Token Efficient Rules
+
+1. Think before acting. Read existing files before writing code.
+2. Be concise in output but thorough in reasoning.
+3. Prefer editing over rewriting whole files.
+4. Do not re-read files you have already read unless the file may have changed.
+5. Test your code before declaring done.
+6. No sycophantic openers or closing fluff.
+7. Keep solutions simple and direct.
+8. User instructions always override this file.
+
+---
+
 @AGENTS.md
 
 > **Next.js 16 — read this first.** This project runs **Next.js 16.2.9** with **React 19**. APIs and conventions differ from older Next.js. Before writing framework code, read the relevant guide in `node_modules/next/dist/docs/` (requires `npm install` first — `node_modules` is not checked in). Most visible break: **`proxy.ts` replaces `middleware.ts`** (see `proxy.ts` at the repo root).
@@ -27,7 +40,10 @@ There is no test runner configured.
 ### Catalog: static source of truth + DB overrides
 The product catalog is **hardcoded** in `lib/data/catalogo.ts` (`SECCIONES_CATALOGO`), not stored in the database. The admin panel edits a Supabase table `productos_override` keyed by the static product `id`; API routes **merge** static products with overrides at request time (`app/api/catalogo/route.ts`, `app/api/admin/productos/route.ts`). Override rows with `is_custom: true` are admin-created products that have no static counterpart. When merging, null override fields are stripped so they don't clobber static values.
 
-The "Arma tu pan" configurator data (formats, flours, extra ingredients and prices) is likewise static in `lib/data/configurador.ts`.
+The "Arma tu pan" configurator data (formats, flours, extra ingredients and prices) is likewise static in `lib/data/configurador.ts`; ingredient prices/availability come from Supabase via `/api/configurador`. Ingredients are sorted alphabetically and rendered with an emoji from `lib/data/ingredienteEmojis.ts` (resolved by id, then by keyword match on the name, then a generic fallback) in both the configurator list and `VisualizadorPan`.
+
+### Bread-recommendation chatbot
+`components/ui/ChatbotFAB.tsx` is a site-wide floating chat bubble (stacked above `WhatsAppFAB`, both mounted in `app/layout.tsx`) that greets the visitor after a delay and answers questions via `app/api/asistente/route.ts`, which calls the Gemini API (`GEMINI_API_KEY`, server-only) grounded in the static catalog (`TODOS_LOS_PRODUCTOS`) and configurador info — never call Gemini from the client.
 
 ### Cart & checkout: client-side, no server orders
 The cart is a **Zustand store with `persist`** (`lib/store/carritoStore.ts`, localStorage key `panaderia-carrito`) — entirely client-side. There is no server-side order/checkout flow. "Placing an order" generates a **WhatsApp deep link** (`lib/whatsapp/generarMensaje.ts`) and optionally sends a confirmation email via **Resend** (`lib/resend/emailConfirmacion.ts`). Custom-bread pricing is computed client-side in `calcularPrecioPersonalizado`.
@@ -64,6 +80,7 @@ ADMIN_SECRET                     # admin cookie value (dev fallback exists)
 RESEND_API_KEY                   # order confirmation emails
 NEXT_PUBLIC_WHATSAPP_TELEFONO    # WhatsApp order destination number
 NEXT_PUBLIC_SITE_URL             # metadataBase / OG URLs
+GEMINI_API_KEY                   # server-only, "Asistente de pan" chatbot (app/api/asistente)
 ```
 
 Remote images are restricted to Unsplash and Cloudinary hosts (`next.config.ts`); image uploads go through `next-cloudinary` (`app/api/admin/upload/route.ts`).

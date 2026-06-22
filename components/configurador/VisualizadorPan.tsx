@@ -2,6 +2,7 @@
 
 import type { TipoPan } from "@/lib/data/catalogo"
 import type { Ingrediente } from "@/lib/data/configurador"
+import { emojiIngrediente } from "@/lib/data/ingredienteEmojis"
 
 interface Props {
   tipoPan: TipoPan | null
@@ -74,20 +75,9 @@ function PanPizza({ masa, corteza }: { masa: string; corteza: string }) {
   )
 }
 
-// Decoraciones visuales por ingrediente
-const DECOR: Record<string, { s: string; pts: Array<[number, number]> }> = {
-  ajonjoli:      { s: "·",  pts: [[168,207],[193,197],[216,210],[180,227],[205,230]] },
-  avena:         { s: "〜", pts: [[163,208],[198,198],[222,215]] },
-  chia:          { s: "•",  pts: [[170,205],[200,196],[222,212],[182,228]] },
-  girasol:       { s: "✿",  pts: [[168,206],[200,196],[224,211]] },
-  multigranos:   { s: "✦",  pts: [[165,205],[195,195],[222,210],[178,228]] },
-  "choc-trad":   { s: "◆",  pts: [[170,205],[200,195],[225,210],[185,228]] },
-  "choc-blanco": { s: "◇",  pts: [[170,205],[200,195],[225,210],[185,228]] },
-  queso:         { s: "◉",  pts: [[170,205],[205,198],[225,218]] },
-  pepitas:       { s: "▸",  pts: [[168,208],[198,200],[225,212],[182,230]] },
-  nuez:          { s: "⬡",  pts: [[170,205],[205,196],[225,212]] },
-  "nuez-azucar": { s: "⬡",  pts: [[170,205],[205,196],[225,212]] },
-}
+// Posiciones donde se dibuja el emoji de cada ingrediente seleccionado
+// (hasta 4) sobre la vista previa del pan.
+const PUNTOS_DECOR: Array<[number, number]> = [[168, 207], [200, 196], [224, 211], [182, 228]]
 
 export default function VisualizadorPan({ tipoPan, integral, seleccionados }: Props) {
   const pal = integral ? COLORES.integral : COLORES.natural
@@ -115,13 +105,11 @@ export default function VisualizadorPan({ tipoPan, integral, seleccionados }: Pr
 
         {/* Decoraciones de ingredientes seleccionados */}
         {seleccionados.slice(0, 4).map((ing, idx) => {
-          const d = DECOR[ing.id]
-          if (!d) return null
-          const [x, y] = d.pts[idx % d.pts.length]
+          const [x, y] = PUNTOS_DECOR[idx]
           return (
             <text key={ing.id} x={x} y={y} fontSize="18" textAnchor="middle"
-              dominantBaseline="middle" fill={pal.corteza} opacity="0.85" className="select-none">
-              {d.s}
+              dominantBaseline="middle" className="select-none">
+              {emojiIngrediente(ing.id, ing.nombre)}
             </text>
           )
         })}
@@ -141,7 +129,7 @@ export default function VisualizadorPan({ tipoPan, integral, seleccionados }: Pr
         )}
         {seleccionados.map((i) => (
           <span key={i.id} className="bg-[var(--color-trigo-100)] text-[var(--color-pan-800)] text-xs px-2 py-1 rounded-full">
-            {i.nombre.split(" ")[0]}
+            {emojiIngrediente(i.id, i.nombre)} {i.nombre.split(" ")[0]}
           </span>
         ))}
       </div>

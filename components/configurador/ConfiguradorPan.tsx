@@ -5,6 +5,7 @@ import Link from "next/link"
 import { useCarritoStore } from "@/lib/store/carritoStore"
 import VisualizadorPan from "./VisualizadorPan"
 import { CONFIGURADOR_TIPOS_INFO, type ConfiguradorTipo, type Ingrediente } from "@/lib/data/configurador"
+import { emojiIngrediente } from "@/lib/data/ingredienteEmojis"
 
 interface IngredienteApi { id: string; grupo: string; nombre: string; precio: number; sabor: string }
 interface BaseApi { tipo_pan: string; precio_base: number; precio_integral: number }
@@ -101,9 +102,9 @@ export default function ConfiguradorPan() {
     setTipo(null); setSeleccionados([]); setIntegral(false); setPaso(0); setCantidad(1)
   }
 
-  const ingredientesFiltrados = tipo?.ingredientes.filter(
+  const ingredientesFiltrados = (tipo?.ingredientes.filter(
     (i) => !tipo.tiene_dulce_salado || i.sabor === tabSabor
-  ) ?? []
+  ) ?? []).sort((a, b) => a.nombre.localeCompare(b.nombre, "es"))
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-10">
@@ -238,6 +239,7 @@ export default function ConfiguradorPan() {
                     >
                       <div className="flex items-start justify-between gap-2">
                         <span className={`text-sm leading-snug ${sel ? "font-semibold text-[var(--color-pan-900)]" : "text-[var(--color-pan-700)]"}`}>
+                          <span className="mr-1.5">{emojiIngrediente(ing.id, ing.nombre)}</span>
                           {ing.nombre}
                         </span>
                         {sel && <span className="text-[var(--color-pan-600)] text-xs shrink-0 mt-0.5">✓</span>}
@@ -360,7 +362,7 @@ export default function ConfiguradorPan() {
                 </div>
                 {seleccionados.map((ing) => (
                   <div key={ing.id} className="flex justify-between text-[var(--color-pan-500)]">
-                    <span className="truncate pr-2">{ing.nombre}</span>
+                    <span className="truncate pr-2">{emojiIngrediente(ing.id, ing.nombre)} {ing.nombre}</span>
                     <span className="shrink-0">+${ing.precio}</span>
                   </div>
                 ))}
