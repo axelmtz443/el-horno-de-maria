@@ -9,6 +9,7 @@ interface PanDestacado {
   id:              string
   nombre:          string
   descripcion?:    string | null
+  ingredientes?:   string[] | null
   precio:          number
   precio_integral: number
   tipo_pan:        string
@@ -55,9 +56,11 @@ function FlipCard({ pan }: { pan: PanDestacado }) {
 
   const imagen    = pan.imagen_url || FALLBACK_IMGS[pan.tipo_pan] || FALLBACK_IMGS.hogaza
   const bgColor   = BG_COLORS[pan.tipo_pan] ?? "#3d2b1f"
-  const ingredientes = pan.descripcion
-    ? pan.descripcion.split(/[,·\n]/).map((s) => s.trim()).filter(Boolean)
-    : []
+  const ingredientes = pan.ingredientes && pan.ingredientes.length > 0
+    ? pan.ingredientes
+    : pan.descripcion
+      ? pan.descripcion.split(/[,·\n]/).map((s) => s.trim()).filter(Boolean)
+      : []
 
   function handleAgregar() {
     agregarProductoCatalogo({
@@ -90,7 +93,6 @@ function FlipCard({ pan }: { pan: PanDestacado }) {
               {pan.descripcion && (
                 <p className="text-white/70 text-xs mt-1 line-clamp-2">{pan.descripcion}</p>
               )}
-              <p className="text-white/50 text-xs mt-2 italic">Pasa el cursor para agregar →</p>
             </div>
           </div>
         </div>
@@ -164,7 +166,7 @@ export default function PanesDestacados() {
           Panes más comprados
         </h2>
         <p className="text-[var(--color-pan-500)] max-w-md mx-auto text-sm">
-          Pasa el cursor sobre cada pan para ver ingredientes y agregar directo a tu pedido.
+          Voltea cada tarjeta para ver ingredientes y agregar directo a tu pedido.
         </p>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">

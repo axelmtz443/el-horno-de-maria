@@ -30,7 +30,7 @@ export async function GET() {
 
     const [{ data: mc }, { data: overrides }] = await Promise.all([
       db.from("mas_comprados").select("posicion, producto_id").order("posicion"),
-      db.from("productos_override").select("id, nombre, descripcion, precio, precio_integral, imagen_url"),
+      db.from("productos_override").select("id, nombre, descripcion, ingredientes, precio, precio_integral, imagen_url"),
     ])
 
     const ids = mc && mc.length === 3

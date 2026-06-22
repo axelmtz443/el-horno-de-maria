@@ -9,7 +9,7 @@ const PREGUNTAS = [
   },
   {
     pregunta: "¿Dónde realizan las entregas?",
-    respuesta: "Actualmente entregamos en Guadalajara y zona metropolitana. Si tienes dudas sobre si llegamos a tu colonia, escríbenos por WhatsApp y con gusto lo confirmamos. Los pedidos se coordinan directamente y el punto de entrega se acuerda al momento del pedido.",
+    respuesta: "Actualmente entregamos en Tlaquepaque, cerca de Santa Cruz del Valle. Si tienes dudas sobre si llegamos a tu colonia, escríbenos por WhatsApp y con gusto lo confirmamos. Los pedidos se coordinan directamente y el punto de entrega se acuerda al momento del pedido.",
   },
   {
     pregunta: "¿Cómo funciona el proceso de compra?",
