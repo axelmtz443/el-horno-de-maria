@@ -8,13 +8,14 @@ function supabaseAdmin() {
   return createClient(url, key, { auth: { persistSession: false } })
 }
 
-// Devuelve solo los overrides (campos cambiados). El catálogo público los fusiona con datos estáticos.
+// Devuelve todos los overrides + productos custom.
+// El catálogo público los fusiona con los datos estáticos.
 export async function GET() {
   try {
     const db = supabaseAdmin()
     const { data } = await db
       .from("productos_override")
-      .select("id, nombre, descripcion, precio, precio_integral, imagen_url")
+      .select("id, nombre, descripcion, ingredientes, precio, precio_integral, imagen_url, disponible, tipo_pan, categoria, is_custom")
 
     return NextResponse.json(data ?? [])
   } catch {

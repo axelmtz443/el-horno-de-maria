@@ -11,7 +11,7 @@ export default function ShopLayout({ children }: { children: React.ReactNode }) 
         </p>
         <p className="text-[var(--color-pan-400)] text-xs mb-3">Pan artesanal de masa madre · Hecho a mano con amor</p>
         <p className="text-[var(--color-pan-500)] text-xs">
-          Pedidos con 1 día de anticipación · Pago al recibir
+          Anticipación de 24 a 36 horas · Gastos de envío no incluidos · Pago al recibir
         </p>
       </footer>
     </>

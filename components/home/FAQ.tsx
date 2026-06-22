@@ -5,7 +5,7 @@ import { useState } from "react"
 const PREGUNTAS = [
   {
     pregunta: "¿Cuánto dura el pan?",
-    respuesta: "El pan de masa madre dura naturalmente 3 a 5 días a temperatura ambiente, bien envuelto. Si lo guardas en el refrigerador puede durar hasta 7 días. También puedes rebanarlo y congelarlo — se conserva perfecto hasta por un mes. No necesita conservadores porque la fermentación natural actúa como conservador.",
+    respuesta: "El pan de masa madre dura naturalmente 5 a 7 días a temperatura ambiente, bien envuelto. Si lo guardas en el refrigerador puede durar hasta 15 días. También puedes congelarlo — se conserva perfecto por 3–6 meses (Recomendable añadir papel entre las rebanadas para evitar que se peguen). No necesita conservadores porque la fermentación natural actúa como conservador.",
   },
   {
     pregunta: "¿Dónde realizan las entregas?",

@@ -4,7 +4,10 @@ export interface ProductoCatalogo {
   id: string
   nombre: string
   descripcion?: string
-  ingredientes?: string[] // ingredientes extra, además de la masa base
+  ingredientes?: string[]     // ingredientes extra, además de la masa base
+  imagen_url?: string | null  // foto del pan (seteada desde admin)
+  disponible?: boolean        // si está visible en el catálogo
+  is_custom?: boolean         // producto agregado desde el admin (no estático)
   categoria: string
   tipo_pan: TipoPan
   precio: number          // precio base (natural)

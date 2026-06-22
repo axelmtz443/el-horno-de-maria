@@ -8,12 +8,14 @@ interface Producto {
   id:              string
   nombre:          string
   descripcion:     string | null
+  ingredientes:    string[] | null
   precio:          number
   precio_integral: number
   imagen_url:      string | null
   disponible:      boolean
   tipo_pan:        string
   categoria:       string
+  is_custom:       boolean
 }
 
 // ─── Modal de edición ────────────────────────────────────────────────────────
@@ -27,18 +29,29 @@ function EditModal({
   onSave: (id: string, fields: Partial<Producto>) => Promise<void>
   onClose: () => void
 }) {
+  const BASE_MASA = ["Harina de trigo", "Agua", "Levadura", "Sal"]
+
   const [nombre,         setNombre]         = useState(producto.nombre)
   const [descripcion,    setDescripcion]    = useState(producto.descripcion ?? "")
+  const [tags,           setTags]           = useState<string[]>(producto.ingredientes ?? [])
+  const [newTag,         setNewTag]         = useState("")
   const [precio,         setPrecio]         = useState(String(producto.precio))
   const [precioIntegral, setPrecioIntegral] = useState(String(producto.precio_integral))
   const [imagenUrl,      setImagenUrl]      = useState(producto.imagen_url ?? "")
   const [saving,         setSaving]         = useState(false)
+
+  function addTag() {
+    const t = newTag.trim()
+    if (t && !tags.includes(t)) setTags([...tags, t])
+    setNewTag("")
+  }
 
   async function handleSave() {
     setSaving(true)
     await onSave(producto.id, {
       nombre:          nombre.trim() || producto.nombre,
       descripcion:     descripcion.trim() || null,
+      ingredientes:    tags.length > 0 ? tags : null,
       precio:          Number(precio)         || producto.precio,
       precio_integral: Number(precioIntegral) || producto.precio_integral,
       imagen_url:      imagenUrl.trim()       || null,
@@ -77,19 +90,62 @@ function EditModal({
             />
           </div>
 
-          {/* Descripción / ingredientes */}
+          {/* Descripción */}
           <div>
             <label className="block text-[var(--color-pan-600)] text-xs font-medium mb-1">
-              Descripción / ingredientes <span className="text-[var(--color-pan-400)] font-normal">(aparece en el catálogo y en los panes destacados)</span>
+              Descripción <span className="text-[var(--color-pan-400)] font-normal">(texto breve bajo el nombre)</span>
             </label>
-            <textarea
+            <input
+              type="text"
               value={descripcion}
               onChange={(e) => setDescripcion(e.target.value)}
-              rows={2}
-              placeholder="Ej: Pasas, canela, arándano, nuez y pepitas de calabaza"
+              placeholder="Ej: Sin ingredientes adicionales"
               className="w-full border border-[var(--color-pan-300)] rounded-xl px-4 py-2.5 text-sm
-                         text-[var(--color-pan-900)] focus:outline-none focus:border-[var(--color-pan-500)] resize-none"
+                         text-[var(--color-pan-900)] focus:outline-none focus:border-[var(--color-pan-500)]"
             />
+          </div>
+
+          {/* Ingredientes extra */}
+          <div>
+            <label className="block text-[var(--color-pan-600)] text-xs font-medium mb-1.5">
+              Ingredientes extras <span className="text-[var(--color-pan-400)] font-normal">(además de harina, agua, levadura y sal)</span>
+            </label>
+            <div className="flex flex-wrap gap-1.5 mb-2 min-h-[32px]">
+              {/* Base masa — fijos */}
+              {BASE_MASA.map((i) => (
+                <span key={i}
+                  className="inline-flex items-center gap-1 text-[10px] px-2.5 py-1 rounded-full
+                             bg-[var(--color-pan-100)] text-[var(--color-pan-500)] border border-[var(--color-pan-200)]">
+                  {i}
+                </span>
+              ))}
+              {/* Ingredientes editables */}
+              {tags.map((t) => (
+                <span key={t}
+                  className="inline-flex items-center gap-1 text-[10px] px-2.5 py-1 rounded-full
+                             bg-[var(--color-pan-700)] text-white">
+                  {t}
+                  <button type="button" onClick={() => setTags(tags.filter((x) => x !== t))}
+                    className="hover:opacity-70 transition-opacity leading-none ml-0.5">×</button>
+                </span>
+              ))}
+            </div>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={newTag}
+                onChange={(e) => setNewTag(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addTag())}
+                placeholder="Ej: Nuez, canela, chocolate…"
+                className="flex-1 border border-[var(--color-pan-300)] rounded-xl px-3 py-2 text-xs
+                           text-[var(--color-pan-900)] focus:outline-none focus:border-[var(--color-pan-500)]"
+              />
+              <button type="button" onClick={addTag}
+                className="px-4 py-2 bg-[var(--color-pan-200)] hover:bg-[var(--color-pan-300)]
+                           text-[var(--color-pan-800)] text-xs font-semibold rounded-xl transition-colors">
+                + Agregar
+              </button>
+            </div>
           </div>
 
           {/* Precios */}

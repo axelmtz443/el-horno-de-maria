@@ -16,14 +16,14 @@ const BENEFICIOS = [
 ]
 
 const COMPARACION = [
-  { aspecto: "Qué lleva",          madre: "Harina, agua, sal y tiempo",  tienda: "Ingredientes que no reconoces" },
+  { aspecto: "Qué lleva",          madre: "Harina, agua, sal y una pizca de aceite de soya si lo requiere",  tienda: "Ingredientes que no reconoces" },
   { aspecto: "Cómo se hace",       madre: "A mano, con paciencia",        tienda: "Proceso industrial acelerado" },
   { aspecto: "Conservadores",      madre: "Ninguno",                      tienda: "Sí — para durar semanas en anaquel" },
   { aspecto: "Cómo te cae",        madre: "Ligero, sin malestar",         tienda: "Pesado, puede hinchar" },
   { aspecto: "Aceite de soya",      madre: "Depende del pan — algunos llevan",                                            tienda: "Sí — presente en la mayoría" },
   { aspecto: "Energía que te da",  madre: "Duradera y estable",                                                          tienda: "Rápida y con bajón después" },
   { aspecto: "Sabor",              madre: "Profundo, con carácter",                                                       tienda: "Igual siempre, sin personalidad" },
-  { aspecto: "Cuánto dura fresco", madre: "3–5 días natural · hasta 15 días refrigerado · 3–6 meses en congelador",      tienda: "Semanas gracias a conservadores" },
+  { aspecto: "Cuánto dura fresco", madre: "hasta 15 días refrigerado · 3–6 meses en congelador",      tienda: "Semanas gracias a conservadores" },
 ]
 
 // ─── Página ───────────────────────────────────────────────────────────────────
