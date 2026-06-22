@@ -10,6 +10,34 @@ export interface ProductoCatalogo {
   precio_integral: number // +$5 siempre
 }
 
+// ─── Ingredientes derivados ───────────────────────────────────────────────────
+
+const BASE_MASA = ["Harina de trigo", "Agua", "Levadura", "Sal"]
+
+// Casos donde el nombre no se puede separar por comas/"y" de forma directa
+const INGREDIENTES_ESPECIALES: Record<string, string[]> = {
+  "Ajonjolí Negro y Blanco con Girasol": ["Ajonjolí negro", "Ajonjolí blanco", "Semillas de girasol"],
+}
+
+export function obtenerIngredientes(producto: ProductoCatalogo): string[] {
+  if (producto.nombre === "Básico") return BASE_MASA
+
+  if (INGREDIENTES_ESPECIALES[producto.nombre]) {
+    return [...BASE_MASA, ...INGREDIENTES_ESPECIALES[producto.nombre]]
+  }
+
+  const fuente = producto.descripcion && producto.descripcion !== "Sin ingredientes adicionales"
+    ? producto.descripcion
+    : producto.nombre.replace(/ con /gi, ", ").replace(/\s*💅/g, "")
+
+  const extras = fuente
+    .split(/,| y /i)
+    .map((s) => s.trim())
+    .filter(Boolean)
+
+  return [...BASE_MASA, ...extras]
+}
+
 function productosCaja(): ProductoCatalogo[] {
   const p = "cj"
   const tipo: TipoPan = "caja"
@@ -148,3 +176,9 @@ export const SECCIONES_CATALOGO = [
   { tipo_pan: "baguette" as TipoPan, titulo: "Baguette",       subtitulo: "3 piezas · 900 gr total · 30 cm", emoji: "🥖", productos: baguette           },
   { tipo_pan: "pizza"    as TipoPan, titulo: "Pan para Pizza", subtitulo: "2 piezas · 900 gr total · 30 cm", emoji: "🍕", productos: pizza              },
 ]
+
+export const TODOS_LOS_PRODUCTOS: ProductoCatalogo[] = SECCIONES_CATALOGO.flatMap((s) => s.productos)
+
+export function buscarProductoPorId(id: string): ProductoCatalogo | undefined {
+  return TODOS_LOS_PRODUCTOS.find((p) => p.id === id)
+}
