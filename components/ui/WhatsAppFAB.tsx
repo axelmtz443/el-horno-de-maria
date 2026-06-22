@@ -1,6 +1,8 @@
 "use client"
 // WhatsApp floating action button
-const TELEFONO = process.env.NEXT_PUBLIC_WHATSAPP_TELEFONO ?? "523313285457"
+import { TELEFONO_PANADERIA } from "@/lib/whatsapp/generarMensaje"
+
+const TELEFONO = TELEFONO_PANADERIA
 const MENSAJE  = encodeURIComponent("Hola, me gustaría hacer un pedido en El Horno de María 🍞")
 
 export default function WhatsAppFAB() {

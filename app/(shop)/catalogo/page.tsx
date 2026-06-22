@@ -70,6 +70,28 @@ function FiltrosCategorias({
   )
 }
 
+// ─── Los más comprados ─────────────────────────────────────────────────────────
+
+function MasComprados({ productos }: { productos: ProductoCatalogo[] }) {
+  if (productos.length === 0) return null
+
+  return (
+    <div className="mb-10">
+      <div className="flex items-center gap-2 mb-4">
+        <span className="text-xl">⭐</span>
+        <h2 className="font-serif text-lg font-bold text-[var(--color-pan-900)]">Los más comprados</h2>
+      </div>
+      <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-none" style={{ scrollbarWidth: "none" }}>
+        {productos.map((p) => (
+          <div key={p.id} className="w-64 shrink-0">
+            <TarjetaProducto producto={p} />
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 // ─── Grid de productos ────────────────────────────────────────────────────────
 
 function GridProductos({ productos }: { productos: ProductoCatalogo[] }) {
@@ -185,9 +207,11 @@ export default function CatalogoPage() {
         </h1>
         <p className="text-[var(--color-pan-500)] text-sm max-w-lg mx-auto">
           Todos nuestros panes a mano, sin conservadores.
-          Cada pan pesa aprox. 900 gr — elige Natural o Integral.
         </p>
       </div>
+
+      {/* ── Los más comprados ── */}
+      <MasComprados productos={destacados} />
 
       {/* ── Tabs de tipo de pan ── */}
       <div ref={tabBarRef}
@@ -196,9 +220,7 @@ export default function CatalogoPage() {
                    scrollbar-none"
         style={{ scrollbarWidth: "none" }}>
         {TABS.map(({ tipo, emoji, label, subtitulo }) => {
-          const seccion = SECCIONES_CATALOGO.find((s) => s.tipo_pan === tipo)!
-          const count   = seccion.productos.length
-          const activo  = tipo === tipActivo
+          const activo = tipo === tipActivo
 
           return (
             <button
@@ -215,7 +237,7 @@ export default function CatalogoPage() {
               <span className="leading-tight">
                 <span className="block font-semibold">{label}</span>
                 <span className={`block text-[10px] font-normal ${activo ? "text-[var(--color-pan-300)]" : "text-[var(--color-pan-400)]"}`}>
-                  {subtitulo} · {count} panes
+                  {subtitulo}
                 </span>
               </span>
             </button>
