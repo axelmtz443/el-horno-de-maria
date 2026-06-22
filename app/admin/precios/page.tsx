@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { CONFIGURADOR_TIPOS, type Ingrediente } from "@/lib/data/configurador"
+import { CONFIGURADOR_TIPOS_INFO } from "@/lib/data/configurador"
 
 // ─── Tipos ────────────────────────────────────────────────────────────────────
 
@@ -13,8 +13,8 @@ interface IngredienteRow {
   precio:     number
   disponible: boolean
   is_custom:  boolean
-  nombre:     string | null  // solo custom
-  sabor:      string | null  // solo custom
+  nombre:     string
+  sabor:      string
 }
 
 interface BaseOverride {
@@ -116,25 +116,25 @@ function IngredienteFilaRow({
       )}
       {saved && !isDirty && <span className="shrink-0 text-green-600 text-xs font-semibold">✓</span>}
 
-      {/* Ocultar / mostrar (estáticos) o Eliminar (custom) */}
-      {isCustom ? (
-        <button onClick={handleDelete} disabled={deleting}
-          className={`shrink-0 px-2.5 py-1 text-xs font-semibold rounded-lg border transition-colors
-            ${confirming
-              ? "bg-red-600 text-white border-red-600"
-              : "text-red-400 border-red-200 hover:bg-red-50"}`}>
-          {deleting ? "…" : confirming ? "¿Eliminar?" : "🗑️"}
-        </button>
-      ) : (
-        <button onClick={onToggle}
-          title={disponible ? "Ocultar ingrediente" : "Mostrar ingrediente"}
-          className={`shrink-0 px-2.5 py-1 text-xs rounded-lg border transition-colors
-            ${disponible
-              ? "text-gray-400 border-gray-200 hover:bg-gray-50 hover:text-gray-600"
-              : "text-green-600 border-green-200 bg-green-50 hover:bg-green-100"}`}>
-          {disponible ? "✕" : "↩"}
-        </button>
-      )}
+      {/* Ocultar / mostrar */}
+      <button onClick={onToggle}
+        title={disponible ? "Ocultar ingrediente" : "Mostrar ingrediente"}
+        className={`shrink-0 px-2.5 py-1 text-xs rounded-lg border transition-colors
+          ${disponible
+            ? "text-gray-400 border-gray-200 hover:bg-gray-50 hover:text-gray-600"
+            : "text-green-600 border-green-200 bg-green-50 hover:bg-green-100"}`}>
+        {disponible ? "✕" : "↩"}
+      </button>
+
+      {/* Eliminar permanentemente */}
+      <button onClick={handleDelete} disabled={deleting}
+        title="Eliminar permanentemente"
+        className={`shrink-0 px-2.5 py-1 text-xs font-semibold rounded-lg border transition-colors
+          ${confirming
+            ? "bg-red-600 text-white border-red-600"
+            : "text-red-400 border-red-200 hover:bg-red-50"}`}>
+        {deleting ? "…" : confirming ? "¿Eliminar?" : "🗑️"}
+      </button>
     </div>
   )
 }
@@ -303,25 +303,9 @@ export default function AdminPreciosPage() {
       .finally(() => setLoading(false))
   }, [])
 
-  // Helpers para obtener estado desde overrides
-  function getOverride(id: string, grupo: Grupo) {
-    return overrides.find((o) => o.id === id && o.grupo === grupo)
+  function getPrecioBase(tipoPan: string, campo: "precio_base" | "precio_integral"): number {
+    return bases.find((b) => b.tipo_pan === tipoPan)?.[campo] ?? 0
   }
-
-  function getPrecio(ing: Ingrediente, grupo: Grupo): number {
-    return getOverride(ing.id, grupo)?.precio ?? ing.precio
-  }
-
-  function getDisponible(ing: Ingrediente, grupo: Grupo): boolean {
-    return getOverride(ing.id, grupo)?.disponible ?? true
-  }
-
-  function getPrecioBase(tipoPan: string, campo: "precio_base" | "precio_integral", fallback: number): number {
-    return bases.find((b) => b.tipo_pan === tipoPan)?.[campo] ?? fallback
-  }
-
-  // Ingredientes custom visibles en el grupo activo
-  const customIngredientes = overrides.filter((o) => o.is_custom && o.grupo === grupoActivo)
 
   // Acciones
   async function savePrecioIngrediente(id: string, grupo: Grupo, precio: number) {
@@ -330,25 +314,13 @@ export default function AdminPreciosPage() {
       body: JSON.stringify({ tipo: "ingrediente", id, grupo, precio }),
     })
     if (res.ok) {
-      setOverrides((prev) => {
-        const filtered = prev.filter((o) => !(o.id === id && o.grupo === grupo))
-        const existing = prev.find((o) => o.id === id && o.grupo === grupo)
-        return [...filtered, { ...(existing ?? { id, grupo, is_custom: false, nombre: null, sabor: null }), precio, disponible: existing?.disponible ?? true }]
-      })
+      setOverrides((prev) => prev.map((o) => (o.id === id && o.grupo === grupo ? { ...o, precio } : o)))
     }
   }
 
   async function toggleIngrediente(id: string, grupo: Grupo, disponible: boolean) {
     // Actualizar estado local primero (optimista) para que la UI responda de inmediato
-    setOverrides((prev) => {
-      const filtered = prev.filter((o) => !(o.id === id && o.grupo === grupo))
-      const existing = prev.find((o) => o.id === id && o.grupo === grupo)
-      return [...filtered, {
-        ...(existing ?? { id, grupo, is_custom: false, nombre: null, sabor: null, precio: 0 }),
-        disponible,
-      }]
-    })
-    // Persistir en Supabase (requiere columna `disponible` en precios_ingredientes)
+    setOverrides((prev) => prev.map((o) => (o.id === id && o.grupo === grupo ? { ...o, disponible } : o)))
     await fetch("/api/admin/configurador", {
       method: "PATCH", headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ tipo: "ingrediente", id, grupo, disponible }),
@@ -391,12 +363,11 @@ export default function AdminPreciosPage() {
     }
   }
 
-  const grupoInfo  = GRUPOS.find((g) => g.key === grupoActivo)!
-  const tipoConfig = CONFIGURADOR_TIPOS.find((t) => t.tipo === grupoInfo.tipos[0])!
-  const ingredientes = tipoConfig.ingredientes
+  const grupoInfo = GRUPOS.find((g) => g.key === grupoActivo)!
 
-  const salados = ingredientes.filter((i) => i.sabor === "salado" || i.sabor === "todos")
-  const dulces  = ingredientes.filter((i) => i.sabor === "dulce")
+  const ingredientesGrupo = overrides.filter((o) => o.grupo === grupoActivo)
+  const salados = ingredientesGrupo.filter((i) => i.sabor === "salado" || i.sabor === "todos")
+  const dulces  = ingredientesGrupo.filter((i) => i.sabor === "dulce")
 
   return (
     <div className="p-8 max-w-3xl">
@@ -451,11 +422,11 @@ export default function AdminPreciosPage() {
             </p>
             <div className="space-y-2">
               {grupoInfo.tipos.map((tipo) => {
-                const cfg = CONFIGURADOR_TIPOS.find((t) => t.tipo === tipo)!
+                const info = CONFIGURADOR_TIPOS_INFO.find((t) => t.tipo === tipo)!
                 return (
-                  <PrecioBaseRow key={tipo} tipoPan={tipo} label={cfg.titulo} emoji={cfg.emoji}
-                    baseActual={getPrecioBase(tipo, "precio_base", cfg.precio_base)}
-                    integralActual={getPrecioBase(tipo, "precio_integral", cfg.precio_base + 5)}
+                  <PrecioBaseRow key={tipo} tipoPan={tipo} label={info.titulo} emoji={info.emoji}
+                    baseActual={getPrecioBase(tipo, "precio_base")}
+                    integralActual={getPrecioBase(tipo, "precio_integral")}
                     onSave={saveBase} />
                 )
               })}
@@ -470,12 +441,12 @@ export default function AdminPreciosPage() {
             <div className="bg-white border border-[var(--color-pan-200)] rounded-2xl divide-y divide-[var(--color-pan-100)]">
               {salados.map((ing) => (
                 <IngredienteFilaRow key={ing.id}
-                  nombre={ing.nombre} sabor={ing.sabor} isCustom={false}
-                  precioActual={getPrecio(ing, grupoActivo)}
-                  disponible={getDisponible(ing, grupoActivo)}
+                  nombre={ing.nombre} sabor={ing.sabor} isCustom={ing.is_custom}
+                  precioActual={ing.precio}
+                  disponible={ing.disponible}
                   onSavePrecio={(p) => savePrecioIngrediente(ing.id, grupoActivo, p)}
-                  onToggle={() => toggleIngrediente(ing.id, grupoActivo, !getDisponible(ing, grupoActivo))}
-                  onDelete={async () => {}} />
+                  onToggle={() => toggleIngrediente(ing.id, grupoActivo, !ing.disponible)}
+                  onDelete={() => deleteIngrediente(ing.id, grupoActivo)} />
               ))}
             </div>
           </div>
@@ -489,27 +460,7 @@ export default function AdminPreciosPage() {
               <div className="bg-white border border-[var(--color-pan-200)] rounded-2xl divide-y divide-[var(--color-pan-100)]">
                 {dulces.map((ing) => (
                   <IngredienteFilaRow key={ing.id}
-                    nombre={ing.nombre} sabor={ing.sabor} isCustom={false}
-                    precioActual={getPrecio(ing, grupoActivo)}
-                    disponible={getDisponible(ing, grupoActivo)}
-                    onSavePrecio={(p) => savePrecioIngrediente(ing.id, grupoActivo, p)}
-                    onToggle={() => toggleIngrediente(ing.id, grupoActivo, !getDisponible(ing, grupoActivo))}
-                    onDelete={async () => {}} />
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Ingredientes custom */}
-          {customIngredientes.length > 0 && (
-            <div className="mb-6">
-              <p className="text-[var(--color-pan-500)] text-xs uppercase tracking-widest font-semibold mb-2">
-                ✨ Personalizados
-              </p>
-              <div className="bg-white border border-[var(--color-pan-200)] rounded-2xl divide-y divide-[var(--color-pan-100)]">
-                {customIngredientes.map((ing) => (
-                  <IngredienteFilaRow key={ing.id}
-                    nombre={ing.nombre ?? "Sin nombre"} sabor={ing.sabor ?? "todos"} isCustom
+                    nombre={ing.nombre} sabor={ing.sabor} isCustom={ing.is_custom}
                     precioActual={ing.precio}
                     disponible={ing.disponible}
                     onSavePrecio={(p) => savePrecioIngrediente(ing.id, grupoActivo, p)}
@@ -529,7 +480,7 @@ export default function AdminPreciosPage() {
           </button>
 
           <p className="text-[var(--color-pan-400)] text-xs mt-5">
-            💡 Guardar con el botón o Enter · ✕ oculta · ↩ restaura · 🗑️ elimina (solo custom)
+            💡 Guardar con el botón o Enter · ✕ oculta · ↩ restaura · 🗑️ elimina permanentemente
           </p>
         </>
       )}

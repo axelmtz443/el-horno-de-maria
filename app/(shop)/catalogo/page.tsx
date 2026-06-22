@@ -175,10 +175,14 @@ export default function CatalogoPage() {
   const seccion = SECCIONES_CATALOGO.find((s) => s.tipo_pan === tipActivo)!
 
   // Aplicar overrides del admin sobre los datos estáticos, filtrar ocultos, añadir custom
+  // Sólo se aplican los campos que vienen con valor — un override con un campo en
+  // null (ej. categoria) no debe borrar el dato estático correspondiente.
   const productosBase = seccion.productos
     .map((p) => {
       const ov = overrides.get(p.id)
-      return ov ? { ...p, ...ov } : p
+      if (!ov) return p
+      const limpio = Object.fromEntries(Object.entries(ov).filter(([, v]) => v != null))
+      return { ...p, ...limpio }
     })
     .filter((p) => p.disponible !== false)
 

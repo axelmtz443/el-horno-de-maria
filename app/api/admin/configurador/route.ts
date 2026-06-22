@@ -96,7 +96,7 @@ export async function PATCH(req: NextRequest) {
   return NextResponse.json({ error: "tipo inválido" }, { status: 400 })
 }
 
-// DELETE — elimina permanentemente un ingrediente custom
+// DELETE — elimina permanentemente un ingrediente (cualquiera, no sólo custom)
 export async function DELETE(req: NextRequest) {
   if (!(await isAdmin())) return NextResponse.json({ error: "No autorizado" }, { status: 401 })
 
@@ -109,7 +109,6 @@ export async function DELETE(req: NextRequest) {
     .delete()
     .eq("id", id)
     .eq("grupo", grupo)
-    .eq("is_custom", true)
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
   return NextResponse.json({ ok: true })
