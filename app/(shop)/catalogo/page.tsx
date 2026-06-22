@@ -210,9 +210,6 @@ export default function CatalogoPage() {
         </p>
       </div>
 
-      {/* ── Los más comprados ── */}
-      <MasComprados productos={destacados} />
-
       {/* ── Tabs de tipo de pan ── */}
       <div ref={tabBarRef}
         className="flex gap-2 overflow-x-auto pb-1 mb-6 sticky top-[60px] z-30
