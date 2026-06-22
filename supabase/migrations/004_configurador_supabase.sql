@@ -6,9 +6,13 @@
 -- admin puede agregar, editar y eliminar (DELETE real, no solo ocultar).
 --
 -- Se reemplaza el esquema de 001_schema_inicial.sql (formato/tipo_harina),
--- que nunca llegó a usarse desde el código de la app.
+-- que nunca llegó a usarse desde el código de la app. precios_ingredientes
+-- también se recrea: el panel de admin la usaba antes de esta migración pero
+-- nunca estuvo conectada a la tienda real, así que no tiene datos que valga
+-- la pena conservar.
 drop table if exists precios_base_pan cascade;
 drop table if exists ingredientes_extra cascade;
+drop table if exists precios_ingredientes cascade;
 
 create table precios_base_pan (
   tipo_pan        text primary key check (tipo_pan in ('caja', 'hogaza', 'baguette', 'pizza')),
