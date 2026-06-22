@@ -1,14 +1,19 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import { useCarritoStore } from "@/lib/store/carritoStore"
 import VisualizadorPan from "./VisualizadorPan"
-import { CONFIGURADOR_TIPOS, PRECIO_INTEGRAL, type ConfiguradorTipo, type Ingrediente } from "@/lib/data/configurador"
+import { CONFIGURADOR_TIPOS_INFO, type ConfiguradorTipo, type Ingrediente } from "@/lib/data/configurador"
+
+interface IngredienteApi { id: string; grupo: string; nombre: string; precio: number; sabor: string }
+interface BaseApi { tipo_pan: string; precio_base: number; precio_integral: number }
 
 const PASOS = ["Tipo de pan", "Ingredientes"] as const
 
 export default function ConfiguradorPan() {
+  const [cargando, setCargando] = useState(true)
+  const [tipos, setTipos] = useState<ConfiguradorTipo[]>([])
   const [paso, setPaso] = useState(0)
   const [tipo, setTipo] = useState<ConfiguradorTipo | null>(null)
   const [seleccionados, setSeleccionados] = useState<Ingrediente[]>([])
@@ -19,7 +24,33 @@ export default function ConfiguradorPan() {
 
   const agregarProductoCatalogo = useCarritoStore((s) => s.agregarProductoCatalogo)
 
-  const precioBase = tipo ? tipo.precio_base + (integral ? PRECIO_INTEGRAL : 0) : 0
+  useEffect(() => {
+    fetch("/api/configurador")
+      .then((r) => r.json())
+      .then((data: { ingredientes: IngredienteApi[]; bases: BaseApi[] }) => {
+        const construidos: ConfiguradorTipo[] = CONFIGURADOR_TIPOS_INFO.map((info) => {
+          const base = data.bases.find((b) => b.tipo_pan === info.tipo)
+          return {
+            tipo: info.tipo,
+            titulo: info.titulo,
+            subtitulo: info.subtitulo,
+            emoji: info.emoji,
+            tiene_dulce_salado: info.tiene_dulce_salado,
+            precio_base: base?.precio_base ?? 0,
+            precio_integral: base?.precio_integral ?? base?.precio_base ?? 0,
+            ingredientes: data.ingredientes
+              .filter((i) => i.grupo === info.grupo)
+              .map((i) => ({ id: i.id, nombre: i.nombre, precio: i.precio, sabor: i.sabor as Ingrediente["sabor"] })),
+          }
+        })
+        setTipos(construidos)
+      })
+      .catch(() => setTipos([]))
+      .finally(() => setCargando(false))
+  }, [])
+
+  const extraIntegral = tipo ? tipo.precio_integral - tipo.precio_base : 0
+  const precioBase = tipo ? tipo.precio_base + (integral ? extraIntegral : 0) : 0
   const precioIngredientes = seleccionados.reduce((acc, i) => acc + i.precio, 0)
   const precioUnitario = precioBase + precioIngredientes
 
@@ -122,8 +153,15 @@ export default function ConfiguradorPan() {
               <h2 className="font-serif text-xl font-semibold text-[var(--color-pan-800)] mb-4">
                 ¿Qué tipo de pan?
               </h2>
+              {cargando ? (
+                <p className="text-[var(--color-pan-500)] text-sm">Cargando opciones…</p>
+              ) : tipos.length === 0 ? (
+                <p className="text-[var(--color-pan-500)] text-sm">
+                  No se pudieron cargar las opciones del configurador. Intenta de nuevo más tarde.
+                </p>
+              ) : (
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                {CONFIGURADOR_TIPOS.map((t) => (
+                {tipos.map((t) => (
                   <button
                     key={t.tipo}
                     onClick={() => seleccionarTipo(t)}
@@ -143,6 +181,7 @@ export default function ConfiguradorPan() {
                   </button>
                 ))}
               </div>
+              )}
             </div>
           )}
 
