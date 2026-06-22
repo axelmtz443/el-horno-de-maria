@@ -450,7 +450,7 @@ export default function AdminPanesPage() {
 
   const filtrados = productos.filter((p) => {
     const matchTipo = tipoActivo === "todos" || p.tipo_pan === tipoActivo
-    const matchBusq = p.nombre.toLowerCase().includes(busqueda.toLowerCase())
+    const matchBusq = (p.nombre ?? "").toLowerCase().includes(busqueda.toLowerCase())
     return matchTipo && matchBusq
   })
 

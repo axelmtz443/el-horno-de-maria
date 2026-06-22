@@ -54,7 +54,10 @@ export async function GET() {
       )
       const merged = base.map((p) => {
         const o = map.get(p.id)
-        return o ? { ...p, ...o } : p
+        if (!o) return p
+        // Filtrar nulls para no sobreescribir campos estáticos con valores vacíos del override
+        const clean = Object.fromEntries(Object.entries(o).filter(([, v]) => v != null))
+        return { ...p, ...clean }
       })
 
       const custom = overrides.filter((o: Record<string, unknown>) => o.is_custom === true)
