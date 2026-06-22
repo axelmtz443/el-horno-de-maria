@@ -62,7 +62,7 @@ export async function POST(req: Request) {
   const contents = [
     ...historial
       .filter((t) => t && typeof t.texto === "string" && (t.rol === "user" || t.rol === "model"))
-      .map((t) => ({ role: t.rol, parts: [{ text: t.texto.slice(0, 500) }] })),
+      .map((t) => ({ role: t.rol === "model" ? "assistant" : "user", parts: [{ text: t.texto.slice(0, 500) }] })),
     { role: "user", parts: [{ text: mensaje }] },
   ]
 
@@ -73,25 +73,29 @@ export async function POST(req: Request) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          system: INSTRUCCION_SISTEMA,
           contents,
-          systemInstruction: { parts: [{ text: INSTRUCCION_SISTEMA }] },
           generationConfig: { maxOutputTokens: 300, temperature: 0.7 },
         }),
       }
     )
 
+    const data = await resp.json()
+
     if (!resp.ok) {
+      console.error("Gemini API error:", data)
       return NextResponse.json({ error: "El asistente no pudo responder" }, { status: 502 })
     }
 
-    const data = await resp.json()
     const respuesta: string | undefined = data?.candidates?.[0]?.content?.parts?.[0]?.text
     if (!respuesta) {
+      console.error("Gemini API respuesta vacía:", data)
       return NextResponse.json({ error: "El asistente no pudo responder" }, { status: 502 })
     }
 
     return NextResponse.json({ respuesta })
-  } catch {
+  } catch (err) {
+    console.error("Error en asistente:", err)
     return NextResponse.json({ error: "El asistente no pudo responder" }, { status: 502 })
   }
 }
