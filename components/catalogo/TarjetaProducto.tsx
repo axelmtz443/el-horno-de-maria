@@ -1,17 +1,19 @@
 "use client"
 
-import { useState } from "react"
+import { useId, useState } from "react"
 import Link from "next/link"
 import { useCarritoStore } from "@/lib/store/carritoStore"
-import type { ProductoCatalogo } from "@/lib/data/catalogo"
+import { obtenerIngredientes, type ProductoCatalogo } from "@/lib/data/catalogo"
 
 export default function TarjetaProducto({ producto }: { producto: ProductoCatalogo }) {
+  const idHarina = useId()
   const [integral, setIntegral] = useState(false)
   const [cantidad, setCantidad] = useState(1)
   const [agregado, setAgregado] = useState(false)
   const agregarProductoCatalogo = useCarritoStore((s) => s.agregarProductoCatalogo)
 
   const precio = integral ? producto.precio_integral : producto.precio
+  const ingredientes = obtenerIngredientes(producto)
 
   function handleAgregar() {
     const nombre = `${producto.nombre}${integral ? " (Integral)" : ""}`
@@ -19,7 +21,7 @@ export default function TarjetaProducto({ producto }: { producto: ProductoCatalo
       id: `${producto.id}-${integral ? "int" : "nat"}`,
       nombre,
       descripcion: producto.descripcion ?? "",
-      ingredientes: [],
+      ingredientes,
       precio,
       imagen_url: "",
       valor_nutrimental: { calorias: 0, proteinas: 0, carbohidratos: 0, grasas: 0, fibra: 0, sodio: 0 },
@@ -42,21 +44,40 @@ export default function TarjetaProducto({ producto }: { producto: ProductoCatalo
         )}
       </div>
 
-      {/* Toggle Integral */}
-      <button
-        onClick={() => setIntegral((v) => !v)}
-        className={`flex items-center gap-2 self-start px-3 py-1.5 rounded-lg border-2 text-xs font-medium
-                    transition-all cursor-pointer
-          ${integral
-            ? "border-[var(--color-pan-600)] bg-[var(--color-pan-200)] text-[var(--color-pan-800)]"
-            : "border-[var(--color-pan-200)] text-[var(--color-pan-500)] hover:border-[var(--color-pan-400)]"}`}
-      >
-        <span className={`w-4 h-4 rounded border-2 flex items-center justify-center shrink-0
-          ${integral ? "bg-[var(--color-pan-600)] border-[var(--color-pan-600)]" : "border-[var(--color-pan-300)]"}`}>
-          {integral && <span className="text-white text-[10px] font-bold">✓</span>}
-        </span>
-        🌿 Integral +$5
-      </button>
+      {/* Selector de harina: Natural / Integral (única selección) */}
+      <fieldset className="flex items-center gap-3 text-xs">
+        <legend className="font-semibold text-[var(--color-pan-600)] mr-1">Harina:</legend>
+        <label className="flex items-center gap-1.5 cursor-pointer select-none">
+          <input
+            type="radio"
+            name={`harina-${idHarina}`}
+            checked={!integral}
+            onChange={() => setIntegral(false)}
+            className="accent-[var(--color-pan-700)] w-3.5 h-3.5"
+          />
+          <span className={!integral ? "font-semibold text-[var(--color-pan-900)]" : "text-[var(--color-pan-500)]"}>
+            Natural
+          </span>
+        </label>
+        <label className="flex items-center gap-1.5 cursor-pointer select-none">
+          <input
+            type="radio"
+            name={`harina-${idHarina}`}
+            checked={integral}
+            onChange={() => setIntegral(true)}
+            className="accent-[var(--color-pan-700)] w-3.5 h-3.5"
+          />
+          <span className={integral ? "font-semibold text-[var(--color-pan-900)]" : "text-[var(--color-pan-500)]"}>
+            Integral <span className="opacity-70">+$5</span>
+          </span>
+        </label>
+      </fieldset>
+
+      {/* Ingredientes */}
+      <p className="text-[10px] text-[var(--color-pan-400)] leading-snug">
+        <span className="font-semibold text-[var(--color-pan-500)]">Ingredientes: </span>
+        {ingredientes.join(", ")}
+      </p>
 
       {/* Precio + cantidad + botón */}
       <div className="flex items-center gap-2 mt-auto pt-1">
