@@ -37,7 +37,7 @@ function EditModal({
 }: {
   producto: Producto
   onSave:   (id: string, fields: Partial<Producto>) => Promise<void>
-  onDelete: (id: string, isCustom: boolean) => Promise<void>
+  onDelete: (id: string) => Promise<void>
   onClose:  () => void
 }) {
   const [nombre,         setNombre]         = useState(producto.nombre)
@@ -78,7 +78,7 @@ function EditModal({
       return
     }
     setDeleting(true)
-    await onDelete(producto.id, producto.is_custom)
+    await onDelete(producto.id)
     setDeleting(false)
     onClose()
   }
@@ -220,16 +220,12 @@ function EditModal({
             {deleting
               ? "Eliminando…"
               : confirmDelete
-                ? "⚠️ Confirmar — esto ocultará el pan del catálogo"
-                : producto.is_custom
-                  ? "🗑️ Eliminar pan"
-                  : "🗑️ Eliminar pan"}
+                ? "⚠️ Confirmar — se eliminará permanentemente"
+                : "🗑️ Eliminar pan"}
           </button>
           {confirmDelete && (
             <p className="text-[10px] text-gray-400 text-center mt-1">
-              {producto.is_custom
-                ? "Se eliminará permanentemente"
-                : "Se ocultará del catálogo — puedes restaurarlo después desde Precio Ingredientes"}
+              Esta acción no se puede deshacer
             </p>
           )}
         </div>
@@ -419,18 +415,13 @@ export default function AdminPanesPage() {
     }
   }
 
-  async function handleDelete(id: string, isCustom: boolean) {
-    if (isCustom) {
-      const res = await fetch("/api/admin/productos", {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id }),
-      })
-      if (res.ok) setProductos((prev) => prev.filter((p) => p.id !== id))
-    } else {
-      // Productos del catálogo estático: ocultar (disponible=false)
-      await handleSave(id, { disponible: false })
-    }
+  async function handleDelete(id: string) {
+    const res = await fetch("/api/admin/productos", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id }),
+    })
+    if (res.ok) setProductos((prev) => prev.filter((p) => p.id !== id))
   }
 
   async function handleCreate(data: Omit<Producto, "id" | "is_custom" | "disponible" | "imagen_url">) {
@@ -457,7 +448,6 @@ export default function AdminPanesPage() {
   const stats = {
     total:    productos.length,
     conImg:   productos.filter((p) => p.imagen_url).length,
-    ocultos:  productos.filter((p) => !p.disponible).length,
   }
 
   return (
@@ -481,11 +471,10 @@ export default function AdminPanesPage() {
 
       {/* Stats */}
       {!loading && !error && (
-        <div className="grid grid-cols-3 gap-4 mb-6">
+        <div className="grid grid-cols-2 gap-4 mb-6">
           {[
             { label: "Total panes",   value: stats.total,   color: "text-[var(--color-pan-800)]" },
             { label: "Con foto",      value: stats.conImg,  color: "text-green-700" },
-            { label: "Ocultos",       value: stats.ocultos, color: "text-orange-600" },
           ].map(({ label, value, color }) => (
             <div key={label} className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
               <p className={`text-2xl font-bold ${color}`}>{value}</p>
@@ -544,7 +533,6 @@ export default function AdminPanesPage() {
                 onClick={() => setEditando(producto)}
                 className={`bg-white rounded-xl border shadow-sm overflow-hidden group cursor-pointer
                   transition-all hover:shadow-md
-                  ${!producto.disponible ? "opacity-50 grayscale" : ""}
                   ${savedId === producto.id ? "ring-2 ring-green-400 border-green-300" : "border-gray-200"}`}
               >
                 <div className="relative h-28 bg-[var(--color-pan-100)]">
@@ -560,11 +548,6 @@ export default function AdminPanesPage() {
                       ✏️ Editar
                     </span>
                   </div>
-                  {!producto.disponible && (
-                    <span className="absolute top-1.5 left-1.5 bg-gray-700 text-white text-[9px] font-medium px-1.5 py-0.5 rounded-full">
-                      Oculto
-                    </span>
-                  )}
                   {producto.is_custom && (
                     <span className="absolute top-1.5 right-1.5 bg-blue-500 text-white text-[9px] font-medium px-1.5 py-0.5 rounded-full">
                       Custom
