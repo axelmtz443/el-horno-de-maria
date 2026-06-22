@@ -62,7 +62,7 @@ export async function POST(req: Request) {
   const contents = [
     ...historial
       .filter((t) => t && typeof t.texto === "string" && (t.rol === "user" || t.rol === "model"))
-      .map((t) => ({ role: t.rol === "model" ? "assistant" : "user", parts: [{ text: t.texto.slice(0, 500) }] })),
+      .map((t) => ({ role: t.rol, parts: [{ text: t.texto.slice(0, 500) }] })),
     { role: "user", parts: [{ text: mensaje }] },
   ]
 
