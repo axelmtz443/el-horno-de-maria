@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import Image from "next/image"
+import ImageUploader from "@/components/admin/ImageUploader"
 
 interface Producto {
   id:              string
@@ -31,8 +32,6 @@ function EditModal({
   const [precio,         setPrecio]         = useState(String(producto.precio))
   const [precioIntegral, setPrecioIntegral] = useState(String(producto.precio_integral))
   const [imagenUrl,      setImagenUrl]      = useState(producto.imagen_url ?? "")
-  const [previewImg,     setPreviewImg]     = useState(producto.imagen_url ?? "")
-  const [imgErr,         setImgErr]         = useState(false)
   const [saving,         setSaving]         = useState(false)
 
   async function handleSave() {
@@ -63,19 +62,6 @@ function EditModal({
             <h2 className="font-serif text-lg font-bold text-[var(--color-pan-900)]">{producto.nombre}</h2>
           </div>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-xl leading-none ml-4">✕</button>
-        </div>
-
-        {/* Preview imagen */}
-        <div className="relative h-40 rounded-xl overflow-hidden bg-[var(--color-pan-100)] mb-4 border border-[var(--color-pan-200)]">
-          {previewImg && !imgErr ? (
-            <Image src={previewImg} alt={nombre} fill className="object-cover" unoptimized
-              onError={() => setImgErr(true)} />
-          ) : (
-            <div className="w-full h-full flex flex-col items-center justify-center text-[var(--color-pan-300)] gap-1">
-              <span className="text-3xl">🍞</span>
-              <p className="text-xs">{imgErr ? "URL no válida" : "Sin imagen"}</p>
-            </div>
-          )}
         </div>
 
         <div className="space-y-4">
@@ -130,19 +116,13 @@ function EditModal({
             </div>
           </div>
 
-          {/* Imagen URL */}
+          {/* Imagen */}
           <div>
-            <label className="block text-[var(--color-pan-600)] text-xs font-medium mb-1">URL de imagen</label>
-            <input
-              type="url"
-              value={imagenUrl}
-              onChange={(e) => { setImagenUrl(e.target.value); setImgErr(false) }}
-              onBlur={() => setPreviewImg(imagenUrl.trim())}
-              placeholder="https://…"
-              className="w-full border border-[var(--color-pan-300)] rounded-xl px-4 py-2.5 text-sm
-                         text-[var(--color-pan-900)] focus:outline-none focus:border-[var(--color-pan-500)]"
+            <label className="block text-[var(--color-pan-600)] text-xs font-medium mb-2">Foto del pan</label>
+            <ImageUploader
+              currentUrl={producto.imagen_url}
+              onUrlReady={(u) => setImagenUrl(u)}
             />
-            <p className="text-[var(--color-pan-400)] text-xs mt-1">Haz clic afuera del campo para previsualizar</p>
           </div>
         </div>
 

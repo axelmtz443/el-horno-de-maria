@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import Image from "next/image"
+import ImageUploader from "@/components/admin/ImageUploader"
 
 interface Producto {
   id: string
@@ -21,10 +22,8 @@ function EditModal({
   onSave: (id: string, url: string) => Promise<void>
   onClose: () => void
 }) {
-  const [url,     setUrl]     = useState(producto.imagen_url ?? "")
-  const [saving,  setSaving]  = useState(false)
-  const [preview, setPreview] = useState(producto.imagen_url ?? "")
-  const [imgErr,  setImgErr]  = useState(false)
+  const [url,    setUrl]    = useState(producto.imagen_url ?? "")
+  const [saving, setSaving] = useState(false)
 
   async function handleSave() {
     setSaving(true)
@@ -46,37 +45,15 @@ function EditModal({
             className="text-gray-400 hover:text-gray-600 text-xl leading-none">✕</button>
         </div>
 
-        {/* Preview imagen */}
-        <div className="relative h-48 rounded-xl overflow-hidden bg-[var(--color-pan-100)] mb-5 border border-[var(--color-pan-200)]">
-          {preview && !imgErr ? (
-            <Image src={preview} alt={producto.nombre} fill className="object-cover"
-              onError={() => setImgErr(true)} unoptimized />
-          ) : (
-            <div className="w-full h-full flex flex-col items-center justify-center text-[var(--color-pan-300)] gap-2">
-              <span className="text-4xl">🖼️</span>
-              <p className="text-xs">{imgErr ? "URL no válida o sin acceso" : "Sin imagen"}</p>
-            </div>
-          )}
-        </div>
-
-        {/* Input URL */}
-        <label className="block text-[var(--color-pan-600)] text-xs font-medium mb-1.5">
-          URL de la imagen
+        <label className="block text-[var(--color-pan-600)] text-xs font-medium mb-2">
+          Foto del pan
         </label>
-        <input
-          type="url"
-          value={url}
-          onChange={(e) => { setUrl(e.target.value); setImgErr(false) }}
-          onBlur={() => setPreview(url.trim())}
-          placeholder="https://images.unsplash.com/photo-..."
-          className="w-full border border-[var(--color-pan-300)] rounded-xl px-4 py-2.5 text-sm text-[var(--color-pan-900)]
-                     focus:outline-none focus:border-[var(--color-pan-500)] transition-colors mb-2"
+        <ImageUploader
+          currentUrl={producto.imagen_url}
+          onUrlReady={(u) => setUrl(u)}
         />
-        <p className="text-[var(--color-pan-400)] text-xs mb-5">
-          Pega la URL de Unsplash, Cloudinary o cualquier imagen pública. Haz clic afuera del campo para previsualizar.
-        </p>
 
-        <div className="flex gap-3">
+        <div className="flex gap-3 mt-5">
           <button onClick={handleSave} disabled={saving}
             className="flex-1 bg-[var(--color-pan-700)] hover:bg-[var(--color-pan-600)] text-white
                        font-semibold py-2.5 rounded-xl text-sm transition-colors disabled:opacity-60">
