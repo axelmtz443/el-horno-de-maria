@@ -1,3 +1,4 @@
+import Image from "next/image"
 import Link from "next/link"
 import Navbar from "@/components/ui/Navbar"
 import PanesDestacados from "@/components/home/PanesDestacados"
@@ -250,7 +251,28 @@ export default function HomePage() {
       <footer className="bg-[var(--color-pan-900)] text-[var(--color-pan-300)] text-center py-8 text-sm">
         <p className="font-serif text-base font-semibold text-[var(--color-pan-100)] mb-1">El Horno de María</p>
         <p className="text-[var(--color-pan-400)] text-xs mb-2">Pan artesanal de masa madre · Hecho a mano con amor</p>
-        <p className="text-[var(--color-pan-500)] text-xs">Anticipación de 24 a 36 horas · Gastos de envío no incluidos · Pago al recibir</p>
+        <p className="text-[var(--color-pan-500)] text-xs mb-6">Anticipación de 24 a 36 horas · Gastos de envío no incluidos · Pago al recibir</p>
+
+        <div className="pt-5 border-t border-[var(--color-pan-700)]/60 max-w-xs mx-auto">
+          <a
+            href="https://axelmartinez.mx/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 text-[var(--color-pan-400)] hover:text-[var(--color-pan-200)]
+                       text-xs transition-colors group"
+          >
+            <Image
+              src="/axel-logo.svg"
+              alt="Axel Martínez"
+              width={18}
+              height={18}
+              className="opacity-70 group-hover:opacity-100 transition-opacity"
+            />
+            <span>
+              Sitio elaborado por <span className="font-medium underline-offset-2 group-hover:underline">Axel Martínez</span>
+            </span>
+          </a>
+        </div>
       </footer>
     </>
   )
