@@ -18,8 +18,9 @@ export default function ChatbotFAB() {
   const finRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const t = setTimeout(() => setMostrarSaludo(true), 4000)
-    return () => clearTimeout(t)
+    const tMostrar = setTimeout(() => setMostrarSaludo(true), 4000)
+    const tOcultar = setTimeout(() => setMostrarSaludo(false), 4000 + 6000)
+    return () => { clearTimeout(tMostrar); clearTimeout(tOcultar) }
   }, [])
 
   useEffect(() => {
