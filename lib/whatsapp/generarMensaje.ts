@@ -5,7 +5,11 @@ export const TELEFONO_PANADERIA = process.env.NEXT_PUBLIC_WHATSAPP_TELEFONO ?? "
 export function generarLinkWhatsApp(items: ItemCarrito[], total: number): string {
   const lineasItems = items.map((item) => {
     if (item.tipo === "catalogo" && item.producto) {
-      return `- ${item.cantidad}x ${item.producto.nombre} - $${(item.precio_unitario * item.cantidad).toFixed(2)}`
+      const ingredientes = item.producto.ingredientes.join(", ") || "ninguno"
+      return [
+        `- ${item.cantidad}x ${item.producto.nombre} - $${(item.precio_unitario * item.cantidad).toFixed(2)}`,
+        `  Ingredientes: ${ingredientes}`,
+      ].join("\n")
     }
 
     if (item.tipo === "personalizado" && item.configuracion) {
