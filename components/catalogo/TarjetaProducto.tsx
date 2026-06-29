@@ -24,6 +24,7 @@ export default function TarjetaProducto({ producto }: { producto: ProductoCatalo
       nombre,
       descripcion: producto.descripcion ?? "",
       ingredientes,
+      tipo_pan: producto.tipo_pan,
       precio,
       imagen_url: producto.imagen_url ?? "",
       valor_nutrimental: { calorias: 0, proteinas: 0, carbohidratos: 0, grasas: 0, fibra: 0, sodio: 0 },

@@ -2,12 +2,21 @@ import type { ItemCarrito } from "@/types"
 
 export const TELEFONO_PANADERIA = process.env.NEXT_PUBLIC_WHATSAPP_TELEFONO ?? "523313285457"
 
+const NOMBRES_TIPO_PAN: Record<string, string> = {
+  caja: "Pan de Caja",
+  hogaza: "Hogaza",
+  baguette: "Baguette",
+  pizza: "Pan para Pizza",
+}
+
 export function generarLinkWhatsApp(items: ItemCarrito[], total: number): string {
   const lineasItems = items.map((item) => {
     if (item.tipo === "catalogo" && item.producto) {
       const ingredientes = item.producto.ingredientes.join(", ") || "ninguno"
+      const tipo = item.producto.tipo_pan ? NOMBRES_TIPO_PAN[item.producto.tipo_pan] ?? item.producto.tipo_pan : null
       return [
         `- ${item.cantidad}x ${item.producto.nombre} - $${(item.precio_unitario * item.cantidad).toFixed(2)}`,
+        ...(tipo ? [`  Tipo: ${tipo}`] : []),
         `  Ingredientes: ${ingredientes}`,
       ].join("\n")
     }

@@ -68,6 +68,7 @@ function FlipCard({ pan }: { pan: PanDestacado }) {
       nombre:      pan.nombre,
       descripcion: pan.descripcion ?? "",
       ingredientes,
+      tipo_pan: pan.tipo_pan,
       precio:      pan.precio,
       imagen_url:  pan.imagen_url ?? "",
       valor_nutrimental: { calorias: 0, proteinas: 0, carbohidratos: 0, grasas: 0, fibra: 0, sodio: 0 },

@@ -10,6 +10,7 @@ export interface Producto {
   valor_nutrimental: ValorNutrimental
   disponible: boolean
   created_at: string
+  tipo_pan?: string
 }
 
 export interface ValorNutrimental {
