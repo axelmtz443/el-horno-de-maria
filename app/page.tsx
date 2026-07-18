@@ -53,7 +53,7 @@ export default function HomePage() {
 
           {/* Texto */}
           <div className="relative z-10 flex flex-col justify-center flex-1 px-6 py-16 md:px-10 lg:px-16 md:py-24">
-            <h1 className="font-serif text-[2.4rem] leading-[1.12] sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-5">
+            <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold leading-[1.15] text-white mb-5">
               <span className="block">Alimenta tu vida</span>
               <span className="block text-[var(--color-pan-300)]">con lo que merece</span>
             </h1>
