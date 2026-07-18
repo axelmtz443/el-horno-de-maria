@@ -39,10 +39,10 @@ export default function HomePage() {
         <section className="relative min-h-[88vh] flex flex-col md:flex-row overflow-hidden bg-[var(--color-pan-900)]">
 
           {/* Lado izquierdo — texto */}
-          <div className="relative z-10 flex flex-col justify-center flex-1 px-8 md:px-16 lg:px-24 py-20 md:py-24">
-            <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[1.08] mb-5">
-              Alimenta tu vida<br />
-              <span className="text-[var(--color-pan-300)]">con lo que merece</span>
+          <div className="relative z-10 flex flex-col justify-center flex-1 px-8 md:px-10 lg:px-16 py-20 md:py-24">
+            <h1 className="font-serif text-4xl lg:text-5xl xl:text-6xl font-bold text-white leading-[1.15] mb-5">
+              <span className="block whitespace-nowrap">Alimenta tu vida</span>
+              <span className="block whitespace-nowrap text-[var(--color-pan-300)]">con lo que merece</span>
             </h1>
 
             <p className="text-[var(--color-pan-200)] text-base md:text-lg max-w-md leading-relaxed mb-8">
@@ -80,7 +80,7 @@ export default function HomePage() {
               sizes="(max-width: 768px) 100vw, 48vw"
             />
             {/* degradado izquierdo para fusionar con el fondo oscuro */}
-            <div className="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-[var(--color-pan-900)] to-transparent" />
+            <div className="absolute inset-y-0 left-0 w-2/3 bg-gradient-to-r from-[var(--color-pan-900)] via-[var(--color-pan-900)]/40 to-transparent" />
           </div>
 
           <div className="absolute bottom-0 left-0 right-0 z-10">
