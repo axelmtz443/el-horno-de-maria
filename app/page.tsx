@@ -267,21 +267,14 @@ export default function HomePage() {
 
         <div className="pt-5 border-t border-[var(--color-pan-700)]/60 max-w-xs mx-auto">
           <a
-            href="https://axelmartinez.mx/"
+            href="https://weprommarketing.mx/"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 text-[var(--color-pan-400)] hover:text-[var(--color-pan-200)]
                        text-xs transition-colors group"
           >
-            <Image
-              src="/axel-logo.svg"
-              alt="Axel Martínez"
-              width={18}
-              height={18}
-              className="opacity-70 group-hover:opacity-100 transition-opacity"
-            />
             <span>
-              Sitio elaborado por <span className="font-medium underline-offset-2 group-hover:underline">Axel Martínez</span>
+              © Sitio elaborado por <span className="font-medium underline-offset-2 group-hover:underline">WeProm Marketing</span>
             </span>
           </a>
         </div>
