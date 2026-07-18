@@ -36,30 +36,22 @@ export default function HomePage() {
       <main className="flex-1">
 
         {/* ── Hero ── */}
-        <section className="relative min-h-[88vh] flex items-center justify-center overflow-hidden bg-[var(--color-pan-900)]">
-          <div className="absolute inset-0 opacity-[0.07]"
-            style={{ backgroundImage: "radial-gradient(#fdf6ec 1.2px, transparent 1.2px)", backgroundSize: "28px 28px" }} />
+        <section className="relative min-h-[88vh] flex flex-col md:flex-row overflow-hidden bg-[var(--color-pan-900)]">
 
-          <div className="relative z-10 max-w-4xl mx-auto px-6 text-center py-24">
-            <div className="inline-flex items-center gap-2 bg-[var(--color-pan-700)]/60 border border-[var(--color-pan-500)]/40
-                            text-[var(--color-pan-300)] text-xs font-medium px-4 py-2 rounded-full mb-8 backdrop-blur-sm">
-              <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-              Horneado a mano, sin conservadores
-            </div>
-
-            <h1 className="font-serif text-5xl md:text-7xl font-bold text-white leading-[1.08] mb-6">
+          {/* Lado izquierdo — texto */}
+          <div className="relative z-10 flex flex-col justify-center flex-1 px-8 md:px-16 lg:px-24 py-20 md:py-24">
+            <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[1.08] mb-5">
               Alimenta tu vida<br />
               <span className="text-[var(--color-pan-300)]">con lo que merece</span>
             </h1>
 
-            <p className="text-[var(--color-pan-200)] text-lg md:text-xl max-w-2xl mx-auto leading-relaxed mb-4">
-              El pan que comes todos los días importa más de lo que crees.
-              Masa madre viva, fermentación natural y cero conservadores —
-              porque tu bienestar empieza en cada rebanada.
+            <p className="text-[var(--color-pan-200)] text-base md:text-lg max-w-md leading-relaxed mb-8">
+              Pan artesanal de masa madre viva y fermentación natural.
+              Sin procesos industriales, directo a tu mesa.
             </p>
 
-            <div className="flex flex-wrap gap-3 justify-center mb-10 mt-6">
-              {["Sin conservadores", "Fácil de digerir", "Energía duradera", "Hecho a mano"].map((tag) => (
+            <div className="flex flex-wrap gap-3 mb-10">
+              {["Fermentación de 24 hrs", "Fácil digestión", "100% Natural"].map((tag) => (
                 <span key={tag}
                   className="text-xs font-medium px-4 py-1.5 rounded-full border border-[var(--color-pan-500)]/50
                              text-[var(--color-pan-300)] bg-[var(--color-pan-800)]/50">
@@ -68,16 +60,30 @@ export default function HomePage() {
               ))}
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div>
               <Link href="/catalogo"
-                className="bg-[var(--color-pan-400)] hover:bg-[var(--color-pan-300)] text-[var(--color-pan-900)]
+                className="inline-block bg-[var(--color-pan-400)] hover:bg-[var(--color-pan-300)] text-[var(--color-pan-900)]
                            font-bold px-9 py-4 rounded-full text-base transition-all hover:scale-105 shadow-lg">
                 Ver catálogo
               </Link>
             </div>
           </div>
 
-          <div className="absolute bottom-0 left-0 right-0">
+          {/* Lado derecho — fotografía */}
+          <div className="relative w-full md:w-[48%] min-h-[40vh] md:min-h-0 shrink-0">
+            <Image
+              src="/fotohero.png"
+              alt="Pan de masa madre artesanal"
+              fill
+              priority
+              className="object-cover object-center"
+              sizes="(max-width: 768px) 100vw, 48vw"
+            />
+            {/* degradado izquierdo para fusionar con el fondo oscuro */}
+            <div className="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-[var(--color-pan-900)] to-transparent" />
+          </div>
+
+          <div className="absolute bottom-0 left-0 right-0 z-10">
             <svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" className="w-full h-12 fill-[var(--color-pan-100)]">
               <path d="M0,40 C360,60 1080,20 1440,40 L1440,60 L0,60 Z" />
             </svg>
