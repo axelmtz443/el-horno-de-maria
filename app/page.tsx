@@ -70,23 +70,17 @@ export default function HomePage() {
           </div>
 
           {/* Lado derecho — fotografía */}
-          <div className="relative w-full md:w-[48%] min-h-[40vh] md:min-h-0 shrink-0">
+          <div className="relative w-full md:w-[60%] min-h-[45vh] md:min-h-0 shrink-0">
             <Image
               src="/fotohero.png"
               alt="Pan de masa madre artesanal"
               fill
               priority
               className="object-cover object-center"
-              sizes="(max-width: 768px) 100vw, 48vw"
+              sizes="(max-width: 768px) 100vw, 60vw"
             />
             {/* degradado izquierdo para fusionar con el fondo oscuro */}
             <div className="absolute inset-y-0 left-0 w-2/3 bg-gradient-to-r from-[var(--color-pan-900)] via-[var(--color-pan-900)]/40 to-transparent" />
-          </div>
-
-          <div className="absolute bottom-0 left-0 right-0 z-10">
-            <svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" className="w-full h-12 fill-[var(--color-pan-100)]">
-              <path d="M0,40 C360,60 1080,20 1440,40 L1440,60 L0,60 Z" />
-            </svg>
           </div>
         </section>
 
