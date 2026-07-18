@@ -274,7 +274,7 @@ export default function HomePage() {
                        text-xs transition-colors group"
           >
             <span>
-              © Sitio elaborado por <span className="font-medium underline-offset-2 group-hover:underline">WeProm Marketing</span>
+              © Sitio elaborado por <span className="font-medium underline-offset-2 group-hover:underline">WeProm® Marketing</span>
             </span>
           </a>
         </div>
