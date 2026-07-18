@@ -33,7 +33,7 @@ export default function FAQ() {
   const [abierto, setAbierto] = useState<number | null>(null)
 
   return (
-    <section className="py-20 px-6 max-w-3xl mx-auto">
+    <section className="py-12 md:py-20 px-6 max-w-3xl mx-auto">
       <div className="text-center mb-12">
         <p className="text-[var(--color-pan-500)] text-xs uppercase tracking-widest font-semibold mb-2">Dudas frecuentes</p>
         <h2 className="font-serif text-3xl md:text-4xl font-bold text-[var(--color-pan-800)] mb-4">

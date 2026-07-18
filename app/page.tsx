@@ -38,23 +38,36 @@ export default function HomePage() {
         {/* ── Hero ── */}
         <section className="relative min-h-[88vh] flex flex-col md:flex-row overflow-hidden bg-[var(--color-pan-900)]">
 
-          {/* Lado izquierdo — texto */}
-          <div className="relative z-10 flex flex-col justify-center flex-1 px-8 md:px-10 lg:px-16 py-20 md:py-24">
-            <h1 className="font-serif text-4xl lg:text-5xl xl:text-6xl font-bold text-white leading-[1.15] mb-5">
-              <span className="block whitespace-nowrap">Alimenta tu vida</span>
-              <span className="block whitespace-nowrap text-[var(--color-pan-300)]">con lo que merece</span>
+          {/* Móvil: imagen como fondo con overlay */}
+          <div className="absolute inset-0 md:hidden">
+            <Image
+              src="/fotohero.png"
+              alt="Pan de masa madre artesanal"
+              fill
+              priority
+              className="object-cover object-center"
+              sizes="100vw"
+            />
+            <div className="absolute inset-0 bg-[var(--color-pan-900)]/72" />
+          </div>
+
+          {/* Texto */}
+          <div className="relative z-10 flex flex-col justify-center flex-1 px-6 py-16 md:px-10 lg:px-16 md:py-24">
+            <h1 className="font-serif text-[2.4rem] leading-[1.12] sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-5">
+              <span className="block">Alimenta tu vida</span>
+              <span className="block text-[var(--color-pan-300)]">con lo que merece</span>
             </h1>
 
-            <p className="text-[var(--color-pan-200)] text-base md:text-lg max-w-md leading-relaxed mb-8">
+            <p className="text-[var(--color-pan-200)] text-sm md:text-base lg:text-lg max-w-sm md:max-w-md leading-relaxed mb-7">
               Pan artesanal de masa madre viva y fermentación natural.
               Sin procesos industriales, directo a tu mesa.
             </p>
 
-            <div className="flex flex-wrap gap-3 mb-10">
+            <div className="flex flex-wrap gap-2 mb-8">
               {["Fermentación de 24 hrs", "Fácil digestión", "100% Natural"].map((tag) => (
                 <span key={tag}
-                  className="text-xs font-medium px-4 py-1.5 rounded-full border border-[var(--color-pan-500)]/50
-                             text-[var(--color-pan-300)] bg-[var(--color-pan-800)]/50">
+                  className="text-xs font-medium px-3 py-1.5 rounded-full border border-[var(--color-pan-500)]/50
+                             text-[var(--color-pan-300)] bg-[var(--color-pan-800)]/60">
                   ✦ {tag}
                 </span>
               ))}
@@ -63,23 +76,22 @@ export default function HomePage() {
             <div>
               <Link href="/catalogo"
                 className="inline-block bg-[var(--color-pan-400)] hover:bg-[var(--color-pan-300)] text-[var(--color-pan-900)]
-                           font-bold px-9 py-4 rounded-full text-base transition-all hover:scale-105 shadow-lg">
+                           font-bold px-8 py-3.5 rounded-full text-base transition-all hover:scale-105 shadow-lg">
                 Ver catálogo
               </Link>
             </div>
           </div>
 
-          {/* Lado derecho — fotografía */}
-          <div className="relative w-full md:w-[60%] min-h-[45vh] md:min-h-0 shrink-0">
+          {/* Desktop: fotografía en panel derecho */}
+          <div className="hidden md:block relative md:w-[60%] shrink-0">
             <Image
               src="/fotohero.png"
               alt="Pan de masa madre artesanal"
               fill
               priority
               className="object-cover object-center"
-              sizes="(max-width: 768px) 100vw, 60vw"
+              sizes="60vw"
             />
-            {/* degradado izquierdo para fusionar con el fondo oscuro */}
             <div className="absolute inset-y-0 left-0 w-2/3 bg-gradient-to-r from-[var(--color-pan-900)] via-[var(--color-pan-900)]/40 to-transparent" />
           </div>
         </section>
@@ -88,7 +100,7 @@ export default function HomePage() {
         <PanesDestacados />
 
         {/* ── Beneficios del pan de masa madre ── */}
-        <section className="py-20 px-6 max-w-6xl mx-auto">
+        <section className="py-12 md:py-20 px-6 max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <p className="text-[var(--color-pan-500)] text-xs uppercase tracking-widest font-semibold mb-2">Salud y bienestar</p>
             <h2 className="font-serif text-3xl md:text-4xl font-bold text-[var(--color-pan-800)] mb-4">
@@ -113,7 +125,7 @@ export default function HomePage() {
         </section>
 
         {/* ── Masa madre vs tienda ── */}
-        <section className="py-20 px-6 bg-[var(--color-pan-900)]">
+        <section className="py-12 md:py-20 px-6 bg-[var(--color-pan-900)]">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
               <p className="text-[var(--color-pan-400)] text-xs uppercase tracking-widest font-semibold mb-2">La diferencia importa</p>
@@ -149,9 +161,9 @@ export default function HomePage() {
         </section>
 
         {/* ── Historia de Martes ── */}
-        <section className="py-20 px-6 bg-[var(--color-pan-200)]">
+        <section className="py-12 md:py-20 px-6 bg-[var(--color-pan-200)]">
           <div className="max-w-4xl mx-auto">
-            <div className="flex flex-col md:flex-row items-center gap-12">
+            <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
               <div className="shrink-0 flex flex-col items-center gap-3">
                 <div className="relative w-40 h-40">
                   <div className="w-40 h-40 rounded-full bg-[var(--color-pan-100)] border-4 border-[var(--color-pan-500)]
@@ -205,7 +217,7 @@ export default function HomePage() {
         <FAQ />
 
         {/* ── CTA Configurador ── */}
-        <section className="py-20 px-6 bg-[var(--color-pan-800)]">
+        <section className="py-12 md:py-20 px-6 bg-[var(--color-pan-800)]">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="font-serif text-3xl md:text-4xl font-bold text-white mb-4">
               Diseña el pan de tus sueños 🍞
@@ -223,8 +235,8 @@ export default function HomePage() {
         </section>
 
         {/* ── ¿Cómo hacer tu pedido? ── */}
-        <section className="py-20 px-6 max-w-5xl mx-auto">
-          <h2 className="font-serif text-3xl font-bold text-center text-[var(--color-pan-800)] mb-14">
+        <section className="py-12 md:py-20 px-6 max-w-5xl mx-auto">
+          <h2 className="font-serif text-2xl md:text-3xl font-bold text-center text-[var(--color-pan-800)] mb-10 md:mb-14">
             ¿Cómo hacer tu pedido?
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
